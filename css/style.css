@@ -1,11 +1,24 @@
-div#current_page {
-    position:absolute;
-    width: 100%;
+body {
+    background-color:black;
+    color: white;
     height: 100%;
+    overflow: hidden;
 }
-div#previous_page {
-    visibility:none;
+#openberg ul {
+    list-style-type: none
 }
-div#next_page {
-    visibility:none;
+#openberg .open:hover {
+    background-color: gray;
+}
+#openberg {
+    text-align: right;
+    font-family: monospace
+}
+#openberg #title {
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+#openberg #pick {
+    border-top: thin white;
 }
