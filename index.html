@@ -1,14 +1,28 @@
 <!DOCTYPE HTML>
 <html> <head>
 <title>Openberg</title>
-<script src="js/main.js" type="text/javascript" defer="defer" />
+<meta charset="utf-8" />
+<script src="lib/zip.js/WebContent/zip.js" type="text/javascript" defer="defer">
+</script>
+<script src="lib/promise/core.js" type="text/javascript" defer="defer">
+</script>
+<script src="js/book.js" type="text/javascript" defer="defer">
+</script>
+<script src="js/main.js" type="text/javascript" defer="defer">
+</script>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
-<div id="current_page">
+<div id="openberg">
+<div id="welcome">
+  <h1 id="title">
+  Welcome to OpenBerg
+  </h1>
+  
+  <ul id="pick">
+    <li class="open" id="pick_file_ul">Open a file <input type="file" id="pick_file"/></li>
+   </ul>
 </div>
-<div id="previous_page">
-</div>
-<div id="next_page">
 </div>
 </body>
 </html>
