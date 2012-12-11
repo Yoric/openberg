@@ -5,92 +5,84 @@
   var Promise = window["promise/core"];
 
   var Book = function Book(files) {
+    if (!files || files.length != 1) {
+      throw new Error("NOT IMPLEMENTED");
+    }
     this._files = files;
-    this._filesIndex = 0;
-    this._entries = null;
-    this._entriesIndex = -1;
-    this._status = null; // Filled by _updateEntries
+    this._filesProcessed = 0;
+    this._rangeMap = [];
+    this._status = null;
     this._updateEntries();
   };
   Book.prototype = {
     /**
-     * @type {Promise} a promise resolved in case of success,
-     * rejected with an exception in case of error.
-     */
-    get status() {
-      return this._status;
-    },
-    /**
-     * Fills _status
+     * Fills _status, _rangeMap
      * @return {Promise}
      */
     _updateEntries: function _updateEntries() {
       var deferred = Promise.defer();
       var self = this;
       obj.zip.createReader(
-        new obj.zip.BlobReader(this._files[this._filesIndex]),
+        new obj.zip.BlobReader(this._files[this._filesProcessed++]),
         function onSuccess(zip) {
           zip.getEntries(function onEntries(entries) {
-            console.log("Setting entries", entries);
-            self._entries = entries;
+            console.log("Pushing entries", entries);
+            self._rangeMap.push(entries);
             deferred.resolve();
           });
         },
         function onError(e) {
-          console.log("_updateCurrentReader error", e);
+          console.log("_updateEntries error", e);
           deferred.reject();
         });
       return self._status = deferred.promise;
     },
-    displayDelta: function displayDelta(elt, delta) {
-      if (typeof delta != "number") {
-        throw new TypeError();
-      }
-      var self = this;
-      return this.status.then(
-        function onInitialized() {
-          // FIXME: This is optimized for delta = +1 or -1
-          // FIXME: If necessary, we could optimize for other cases
-          if (delta > 0) {
-            // Check if we have reached the end of the file
-            if (self._entriesIndex + delta >= self._entries.length) {
-              if (self._filesIndex + 1 >= self._files.length) {
-                return Promise.reject(Book.Error.NO_MORE_PAGES);
-              }
-              self._filesIndex++;
-              return self._updateEntries().then(
-                function onSuccess() {
-                  self._entriesIndex = -1;
-                  return self.displayDelta(elt, delta - 1);
-                }
-              );
-            }
-          } else if (delta < 0) {
-           if (self._entriesIndex + delta < 0) {
-              if (self._filesIndex <= 0) {
-                return Promise.reject(Book.Error.NO_MORE_PAGES);
-              }
-              self._filesIndex--;
-              return self._updateEntries().then(
-                function onSuccess() {
-                  self._entriesIndex = self._entries.length - 1;
-                  return self.displayDelta(elt, delta + 1);
-                }
-              );
-            }
+    displayPage: function displayPage(elt, page) {
+      // Search page in range map
+      // FIXME: Todo
+      /*
+      // FIXME If we deal with many files, we
+      // could optimize with a binary search
+      var pageEntry = null;
+      var total = 0;
+      while (!pageEntry) {
+        for (var i = 0; i < this._filesProcessed; ++i) {
+          var range = this._rangeMap[i];
+          var rangeEnd = total + range.length;
+          if (rangeEnd > page) {
+            // Page is somewhere in the current range
+            pageEntry = this._rangeMap[page - total];
+            break;
           }
-          self._entriesIndex += delta;
-          var entry = self._entries[self._entriesIndex];
-          if (entry.directory) {
+        }
+        if (!pageEntry) {
+          if (this._filesProcessed < this._files.length) {
+            var promise = this._updateEntries();
+          }
+        }
+        // FIXME process more files
+      }
+       */
+      var self = this;
+      return this._status.then(
+        function afterInit() {
+          console.log("Fetching entry", page, "in", self._rangeMap);
+          var pageEntry = self._rangeMap[0][page];
+          if (!pageEntry) {
+            console.log("No more pages");
+            throw REJECT_NO_MORE_PAGES;
+          }
+          console.log("Entry", pageEntry);
+          if (pageEntry.directory) {
+            console.log("This is a directory");
             elt.innerHTML = "";
-            elt.textContent = "Directory " + entry.filename;
+            elt.textContent = "Directory " + pageEntry.filename;
             return RESOLVED;
           }
           var deferred = Promise.defer();
-          entry.getData(
-            new obj.zip.BlobWriter(),
+          pageEntry.getData(
+          new obj.zip.BlobWriter(),
             function onEnd(data) {
-              console.log("Displaying", entry);
               elt.innerHTML = "";
               var eltImg = document.createElement("img");
               elt.appendChild(eltImg);
@@ -101,30 +93,17 @@
               reader.readAsDataURL(data);
               deferred.resolve();
             }, null);
-            return deferred.promise;
-          });
-    },
-    /**
-     * Asynchronously decode the next page and display it on
-     * element |elt|.
-     */
-    displayNext: function(elt) {
-      return this.displayDelta(elt, 1);
-    },
-    /**
-     * Asynchronously decode the previous page and display it on
-     * element |elt|.
-     */
-    displayPrev: function(elt) {
-      return this.displayDelta(elt, -1);
+          return deferred.promise;
+        }
+      );
     }
   };
-
   Book.Error = function Error(message) {
     window.Error.call(this, message);
   };
   Book.Error.NO_MORE_PAGES = new Book.Error("Moving beyond the last page");
 
+  const REJECT_NO_MORE_PAGES = Promise.reject(Book.Error.NO_MORE_PAGES);
   const RESOLVED = Promise.resolve();
 
   obj.Book = Book;

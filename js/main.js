@@ -1,6 +1,7 @@
 (function(obj) {
   // The book
   var book = null;
+  var currentPage = null;
 
   // Setup zip
   obj.zip.workerScriptsPath = "lib/zip.js/WebContent/";
@@ -31,15 +32,25 @@
       files.push(eltFilePicker.files[i]);
     }
     book = new obj.Book(files);
-    book.displayNext(eltPages).then(
+    displayPage(eltPages, currentPage = 0);
+  });
+
+  var displayPage = function displayDelta(elt, page) {
+    if (!book) {
+      return;
+    }
+    book.displayPage(elt, page).then(
       function onSuccess() {
         console.log("Display success");
       },
       function onError(e) {
+        eltPages.innerHTML = "";
+        eltPages.textContent = "Display error";
         console.log("Display error", e);
+        console.dir(e);
       }
     );
-  });
+  };
 
   var onkey = function onkey(event) {
     console.log("keypress", event);
@@ -47,34 +58,26 @@
       return;
     }
     var code;
-    var delta;
     if ("keyCode" in event || "which" in event) {
       code = event.keyCode || event.which;
       if (
         code == KeyEvent.DOM_VK_DOWN
           || code == KeyEvent.DOM_VK_PAGE_DOWN
           || code == KeyEvent.DOM_VK_RIGHT
+          || code == KeyEvent.DOM_VK_SPACE
          ) {
-        delta = 1;
+        ++currentPage;
       } else if (
         code == KeyEvent.DOM_VK_UP
           || code == KeyEvent.DOM_VK_PAGE_UP
           || code == KeyEvent.DOM_VK_LEFT
+          || code == KeyEvent.DOM_VK_BACK_SPACE
       ) {
-        delta = -1;
+        --currentPage;
       } else {
         return;
       }
-      book.displayNext(eltPages).then(
-        function onSuccess() {
-          console.log("Display success");
-        },
-        function onError(e) {
-          eltPages.innerHTML = "";
-          eltPages.textContent = "Display error";
-          console.log("Display error", e);
-        }
-      );
+      displayPage(eltPages, currentPage);
     }
   };
 
