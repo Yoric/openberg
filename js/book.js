@@ -57,10 +57,10 @@
               if (self._filesIndex + 1 >= self._files.length) {
                 return Promise.reject(Book.Error.NO_MORE_PAGES);
               }
-              self._entriesIndex = -1;
               self._filesIndex++;
               return self._updateEntries().then(
                 function onSuccess() {
+                  self._entriesIndex = -1;
                   return self.displayDelta(elt, delta - 1);
                 }
               );
@@ -74,7 +74,7 @@
               return self._updateEntries().then(
                 function onSuccess() {
                   self._entriesIndex = self._entries.length - 1;
-                  return self.displayDelta(elt, delta - 1);
+                  return self.displayDelta(elt, delta + 1);
                 }
               );
             }
@@ -90,13 +90,15 @@
           entry.getData(
             new obj.zip.BlobWriter(),
             function onEnd(data) {
+              console.log("Displaying", entry);
+              elt.innerHTML = "";
               var eltImg = document.createElement("img");
               elt.appendChild(eltImg);
-              var reader = new FileReader(data);
+              var reader = new FileReader();
               reader.onload = function onLoad(e) {
                 eltImg.src = e.target.result;
               };
-              reader.readAsDataURL();
+              reader.readAsDataURL(data);
               deferred.resolve();
             }, null);
             return deferred.promise;
