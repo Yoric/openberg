@@ -61,13 +61,35 @@ body {
 /*
   Pages
 */
-#openberg #pages {
+#pages {
     position: absolute;
     width: 100%;
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 #pages img {
     max-width: 100%;
     max-height: 100%;
+}
+
+/*
+Controls
+*/
+.control {
+    position:absolute;
+    bottom: 32px;
+    width: 32px;
+    height: 32px;
+    background-size: 32px 32px;
+    z-index: 10;
+}
+#go_left {
+    background-image: url("../img/arrow_left.png");
+    left: 1%;
+}
+#go_right {
+    background-image: url("../img/arrow_right.png");
+    right: 1%;
 }

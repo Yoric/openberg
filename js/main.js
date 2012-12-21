@@ -36,12 +36,22 @@
   var eltFilePickerControl = document.getElementById("pick_file_control");
   var eltFilePickerTab = document.getElementById("pick_file_tab");
   var eltPages = document.getElementById("pages");
+  var eltFlip = document.getElementById("flipbook");
   var eltWelcome = document.getElementById("welcome");
+  var eltLeft = document.getElementById("go_left");
+  var eltRight = document.getElementById("go_right");
 
+  eltPages.style.display = "none";
 
-  var flipBook = new obj.FlipBook(eltPages, Options);
+  var flipBook = new obj.FlipBook(eltFlip, Options);
 
-  // User Interface
+  /**
+   * Handle events
+   */
+
+  /**
+   * File picker
+   */
   eltFilePickerTab.addEventListener("click", function oncommand(e) {
     eltFilePickerControl.click();
   });
@@ -70,6 +80,9 @@
     );
   });
 
+  /**
+   * Keyboard
+   */
   var onkey = function onkey(event) {
     var code;
     var delta;
@@ -94,31 +107,55 @@
       } else {
         return;
       }
-      if (flipBook.book == null) {
-        return;
-      }
-      flipBook.page += delta;
-      flipBook.display().then(
-        function onSuccess() {
-          // Back into the book
-          eltWelcome.style.display = "none";
-          eltPages.style.display = null;
-        },
-        function onFailure(e) {
-          if (e instanceof obj.Book.NoSuchPageError) {
-            // We have left the book
-            eltPages.style.display = "none";
-            eltWelcome.style.display = null;
-          }
-        }
-      );
+      movePage(delta);
     }
   };
 
   document.addEventListener("keypress", onkey);
 
+  /**
+   * Mouse/touch
+   */
+
+  var movePage = function movePage(delta) {
+    if (flipBook.book == null) {
+      return;
+    }
+    flipBook.page += delta;
+    flipBook.display().then(
+      function onSuccess() {
+        // Back into the book
+        eltWelcome.style.display = "none";
+        eltPages.style.display = null;
+      },
+      function onFailure(e) {
+        if (!(e instanceof obj.Book.NoSuchPageError)) {
+          console.error("Cannot handle error", e);
+        }
+        // We have left the book
+        eltPages.style.display = "none";
+        eltWelcome.style.display = null;
+      }
+    );
+  };
 
   // Debugging code
+  var oncontrol = function oncontrol(e) {
+    var delta;
+    if (e.target == eltRight) {
+      delta = Options.ltr?1:-1;
+      e.stopPropagation();
+      movePage(delta);
+    } else if (e.target == eltLeft) {
+      delta = Options.ltr?-1:1;
+      e.stopPropagation();
+      movePage(delta);
+    }
+  };
+  eltLeft.addEventListener("click", oncontrol);
+  eltRight.addEventListener("click", oncontrol);
+  eltLeft.addEventListener("touchup", oncontrol);
+  eltRight.addEventListener("touchup", oncontrol);
 
   window.OpenBerg = {
     flipBook: flipBook,
