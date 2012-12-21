@@ -100,6 +100,7 @@
   // Debugging code
 
   window.OpenBerg = {
-    flipBook: flipBook
+    flipBook: flipBook,
+    options: Options
   };
 })(this);

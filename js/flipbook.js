@@ -67,12 +67,16 @@
             return;
           }
           console.error("Unrecognized data", data);
-        }));
+          throw new Error("Unrecognized data");
+        }),
+        function onError(e) {
+          console.log("No such page");
+        });
     },
     fetch: function fetch(pageNum) {
       // Don't bother fetching the page if it is negative
       if (pageNum < 0) {
-        return Promise.reject(obj.Book.Error.NO_MORE_PAGES);
+        Promise.reject(new obj.Book.NoSuchPageError(pageNum, 0));
       }
 
       // Starting page prefetch

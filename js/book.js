@@ -3,10 +3,19 @@
 
   var console = window.console;
   var Promise = window["promise/core"];
+  var log = (function(){
+    var logger = console.log.bind(console.log, "Book");
+    return function(...args) {
+      if (obj.OpenBerg.options.debugBook) {
+        logger.apply(null, args);
+      }
+    };
+  })();
 
   var Book = function Book(files) {
     if (!files || files.length != 1) {
-      throw new Error("NOT IMPLEMENTED");
+      throw new Error("Books composed of several files are not "+
+                      "implemented yet");
     }
     this._files = files;
     this._filesProcessed = 0;
@@ -26,13 +35,13 @@
         new obj.zip.BlobReader(this._files[this._filesProcessed++]),
         function onSuccess(zip) {
           zip.getEntries(function onEntries(entries) {
-            console.log("Pushing entries", entries);
+            log("Pushing entries", entries);
             self._rangeMap.push(entries);
             deferred.resolve();
           });
         },
         function onError(e) {
-          console.log("_updateEntries error", e);
+          log("_updateEntries error", e);
           deferred.reject();
         });
       return self._status = deferred.promise;
@@ -66,11 +75,15 @@
       var self = this;
       return this._status.then(
         function afterInit() {
-          console.log("Fetching entry", page, "in", self._rangeMap);
-          var pageEntry = self._rangeMap[0][page];
-          if (!pageEntry) {
-            return REJECT_NO_MORE_PAGES;
+          log("Fetching entry", page, "in", self._rangeMap);
+          var currentRange = self._rangeMap[0];
+          if (page < 0) {
+            throw new Book.NoSuchPageError(page, 0);
+          } else if (page >= currentRange.length) {
+            throw new Book.NoSuchPageError(page,
+              currentRange.length - 1);
           }
+          var pageEntry = currentRange[page];
           console.log("Entry", pageEntry.fileName);
           if (pageEntry.directory) {
             console.log("Entry is a directory");
@@ -92,8 +105,25 @@
   Book.Error = function Error(message) {
     window.Error.call(this, message);
   };
-  Book.Error.NO_MORE_PAGES = new Book.Error("Moving beyond the last page");
+  Book.Error.prototype = Object.create(window.Error.prototype);
 
+  Book.NoSuchPageError = function NoSuchPageError(pageNum, closestPageNum) {
+    console.log("NoSuchPageError");
+    Book.Error.call(this, "No such page");
+    this._pageNum = pageNum;
+    this._closestPageNum = closestPageNum;
+  };
+  Book.NoSuchPageError.prototype = Object.create(Book.Error.prototype);
+  Book.NoSuchPageError.prototype.toString = function toString() {
+    return "No such page: " + this._pageNum +
+      " (closest valid page is " + this._closestPageNum + ")";
+  };
+
+  /**
+   * A page of a comics
+   *
+   * @constructor
+   */
   Book.ComicsPage = function ComicsPage(data) {
     this.imgURL = window.URL.createObjectURL(data);
   };
@@ -104,7 +134,6 @@
     }
   };
 
-  const REJECT_NO_MORE_PAGES = Promise.reject(Book.Error.NO_MORE_PAGES);
   const RESOLVED = Promise.resolve();
 
   obj.Book = Book;
