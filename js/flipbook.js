@@ -7,7 +7,7 @@
 
 
   var FlipBook = function FlipBook(parent, options) {
-    this._map = new window.Map();
+    this._map = null;
     this._bufferBefore = options.bufferBackwardsSize;
     this._bufferAfter = options.bufferForwardsSize;
     this._book = null;
@@ -20,7 +20,23 @@
       return this._book;
     },
     set book(book) {
+      if (book === this._book) {
+        return;
+      }
+
       this._book = book;
+
+      // New book? Clean up cache
+      if (this._map) {
+        for (var [k, val] of this._map) {
+          if ("dispose" in val) {
+            val.dispose();
+          }
+        };
+      }
+      this._map = new window.Map();
+
+      // New book? Start at page 0, by default.
       this._page = 0;
     },
     set page(page) {
@@ -112,7 +128,7 @@
       // Cleaning up cache
       for (var [k, val] of this._map) {
         if (k < pageNum - self._bufferBefore || k > pageNum + self._bufferAfter) {
-          console.log("Removing from cache page", pageNum);
+          console.log("Removing from cache page", k);
           if ("dispose" in val) {
             val.dispose();
           }
