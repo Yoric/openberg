@@ -11,9 +11,8 @@
   // Setup zip
   obj.zip.workerScriptsPath = "lib/zip.js/WebContent/";
 
-  // Get rid of warnings
+  // Utilities
   var console = window.console;
-  var Map = window.Map;
   var requestAnimationFrame =
     window.requestAnimationFrame
   || window.mozRequestAnimationFrame
@@ -62,8 +61,12 @@
     }
     flipBook.book = new obj.Book(files);
     flipBook.page = 0;
-    flipBook.display();
-    eltWelcome.style.display = "none";
+    flipBook.display().then(
+      function onSuccess() {
+        // The page was displayed correctly, hide the welcome screen
+        eltWelcome.style.display = "none";
+      }
+    );
   });
 
   var onkey = function onkey(event) {
@@ -72,25 +75,37 @@
     if ("keyCode" in event || "which" in event) {
       code = event.keyCode || event.which;
       if ( // FIXME: Chrome doesn't define KeyEvent
-           // FIXME: LEFT and RIGHT should depend on Options.ltr
         code == KeyEvent.DOM_VK_DOWN
           || code == KeyEvent.DOM_VK_PAGE_DOWN
-          || code == KeyEvent.DOM_VK_RIGHT
           || code == KeyEvent.DOM_VK_SPACE
          ) {
            delta = 1;
       } else if (
         code == KeyEvent.DOM_VK_UP
           || code == KeyEvent.DOM_VK_PAGE_UP
-          || code == KeyEvent.DOM_VK_LEFT
           || code == KeyEvent.DOM_VK_BACK_SPACE
       ) {
         delta = -1;
+      } else if (code == KeyEvent.DOM_VK_RIGHT) {
+        delta = Options.ltr?1:-1;
+      } else if (code == KeyEvent.DOM_VK_LEFT) {
+        delta = Options.ltr?-1:1;
       } else {
         return;
       }
+      // FIXME: If we are on the display screen, we can
+      // use the keyboard to return to the book
       flipBook.page += delta;
-      flipBook.display();
+      flipBook.display().then(
+        null,
+        function onFailure(e) {
+          if (e instanceof obj.Book.NoSuchPageError) {
+            // We have left the book
+            eltPages.style.display = "none";
+            eltWelcome.style.display = null;
+          }
+        }
+      );
     }
   };
 
