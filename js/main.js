@@ -65,6 +65,7 @@
       function onSuccess() {
         // The page was displayed correctly, hide the welcome screen
         eltWelcome.style.display = "none";
+        eltPages.style.display = null;
       }
     );
   });
@@ -93,11 +94,16 @@
       } else {
         return;
       }
-      // FIXME: If we are on the display screen, we can
-      // use the keyboard to return to the book
+      if (flipBook.book == null) {
+        return;
+      }
       flipBook.page += delta;
       flipBook.display().then(
-        null,
+        function onSuccess() {
+          // Back into the book
+          eltWelcome.style.display = "none";
+          eltPages.style.display = null;
+        },
         function onFailure(e) {
           if (e instanceof obj.Book.NoSuchPageError) {
             // We have left the book
