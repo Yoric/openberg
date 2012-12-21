@@ -3,6 +3,8 @@ body {
     color: white;
     height: 100%;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 /*
@@ -33,6 +35,8 @@ body {
 #openberg {
     text-align: right;
     font-family: monospace
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -79,17 +83,19 @@ Controls
 */
 .control {
     position:absolute;
-    bottom: 32px;
+    bottom: 16px;
     width: 32px;
     height: 32px;
     background-size: 32px 32px;
     z-index: 10;
+    padding: 0;
+    margin: 0;
 }
 #go_left {
-    background-image: url("../img/arrow_left.png");
-    left: 1%;
+    background-image: url("../img/arrow_left2.png");
+    left: 0%;
 }
 #go_right {
-    background-image: url("../img/arrow_right.png");
-    right: 1%;
+    background-image: url("../img/arrow_right2.png");
+    right: 0%;
 }
