@@ -84,7 +84,7 @@
               currentRange.length - 1);
           }
           var pageEntry = currentRange[page];
-          console.log("Entry", pageEntry.fileName);
+          console.log("Entry", pageEntry.filename);
           if (pageEntry.directory) {
             console.log("Entry is a directory");
             return {directory: pageEntry.filename};

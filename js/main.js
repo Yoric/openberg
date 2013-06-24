@@ -35,15 +35,38 @@
   // Elements
   var eltFilePickerControl = document.getElementById("pick_file_control");
   var eltFilePickerTab = document.getElementById("pick_file_tab");
+  var eltMenuLink = document.getElementById("menu-buton");
+  var eltMenu = document.getElementById("menu");
   var eltPages = document.getElementById("pages");
   var eltFlip = document.getElementById("flipbook");
   var eltWelcome = document.getElementById("welcome");
   var eltLeft = document.getElementById("go_left");
   var eltRight = document.getElementById("go_right");
 
-  eltPages.style.display = "none";
+  /**
+   * Local Storage Options
+  */   
+  var readerOptions = {};
+  // Get ComicReader general options using local Storage or load a new options set
+  if ( typeof(Storage)!=="undefined" && localStorage.getItem( 'readerOptionsStored' ) ) {
+      // Localstorage detected - Load setings
+      readerOptions = JSON.parse( localStorage.getItem( 'readerOptionsStored' ) );
+  } else {
+      // No localstorage settings detected (first time or no local storage avaible) - Create new profile
+      readerOptions = {
+          'zoom': false,
+          'fitwidth': true,
+          'rememberpage': true,
+          'offline': false,
+          'tour': false
+      };
+      // Save in local storage if avaible
+      if ( typeof(Storage)!=="undefined" ) {
+          localStorage.setItem( 'readerOptionsStored', JSON.stringify( readerOptions ) );
+      }
+  }
 
-  var flipBook = new obj.FlipBook(eltFlip, Options);
+  var flipBook = new obj.FlipBook(eltFlip, Options, readerOptions);
 
   /**
    * Handle events
@@ -75,7 +98,6 @@
       function onSuccess() {
         // The page was displayed correctly, hide the welcome screen
         eltWelcome.style.display = "none";
-        eltPages.style.display = null;
       }
     );
   });
@@ -121,23 +143,38 @@
     if (flipBook.book == null) {
       return;
     }
+
     flipBook.page += delta;
     flipBook.display().then(
       function onSuccess() {
         // Back into the book
         eltWelcome.style.display = "none";
-        eltPages.style.display = null;
       },
       function onFailure(e) {
         if (!(e instanceof obj.Book.NoSuchPageError)) {
           console.error("Cannot handle error", e);
         }
         // We have left the book
-        eltPages.style.display = "none";
         eltWelcome.style.display = null;
       }
     );
   };
+
+  /**
+  * Open / Cose Menu
+  */ 
+
+  eltMenuLink.addEventListener("click", function oncommand(e) {
+    if (eltMenu.className == 'menu_open') {
+      eltMenu.className = 'menu_close';
+      eltMenuLink.className = 'menu_link_close';
+    }else{
+      eltMenu.className = 'menu_open';
+      eltMenuLink.className = 'menu_link_open';
+    }
+    e.preventDefault();
+  });
+
 
   // Debugging code
   var oncontrol = function oncontrol(e) {

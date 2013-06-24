@@ -5,8 +5,7 @@
   var console = obj.console;
   var Promise = obj["promise/core"];
 
-
-  var FlipBook = function FlipBook(parent, options) {
+  var FlipBook = function FlipBook(parent, options, readerOptions) {
     this._map = null;
     this._bufferBefore = options.bufferBackwardsSize;
     this._bufferAfter = options.bufferForwardsSize;
@@ -14,7 +13,9 @@
     this._page = 0;
     this._previousPage = -1;
     this._parent = parent;
+    this._readerOptions = readerOptions;
   };
+
   FlipBook.prototype = {
     get book() {
       return this._book;
@@ -52,6 +53,12 @@
     get page() {
       return this._page;
     },
+    set readerOptions(options) {
+      this._readerOptions = options;
+    },
+    get readerOptions() {
+      return this._readerOptions;
+    },
     display: function display() {
       console.log("Display of page", this.page,
       "has been requested - I come from page", this._previousPage);
@@ -59,6 +66,8 @@
       var promise = this.fetch(page);
       var self = this;
       var eltPages = this._parent;
+      var readerOptions = this.readerOptions;
+      
       eltPages.classList.add("loading");
       return Promise.withLog(promise.then(
         function onSuccess(data) {
@@ -80,6 +89,48 @@
             var img = document.createElement("img");
             eltPages.appendChild(img);
             img.src = data.imgURL;
+
+            // Visualization
+            function loadVisualization() {
+              if (readerOptions.zoom) {
+              // Zoom ON
+                if (readerOptions.fitwidth) {
+                //Fit width
+                  var divSize = eltPages.clientWidth;
+                  var imgSize = img.naturalWidth ;
+                  var percentResponsive = (divSize*100)/imgSize;
+                }else{
+                //Fit height
+                  percentResponsive = "";
+                }
+
+                $(img).smoothZoom( {
+                    zoom_MAX: 400,
+                    responsive: true,
+                    background_COLOR: "#000",
+                    border_SIZE: 0,
+                    zoom_BUTTONS_SHOW: false,
+                    pan_BUTTONS_SHOW: false,
+                    initial_ZOOM: percentResponsive,
+                    initial_POSITION: "0 0"
+                } );
+
+              }else{
+              // Zoom OFF
+                if (readerOptions.fitwidth) {
+                //Fit width
+                  eltPages.style.overflow = "auto";
+                  img.style.width = "100%";
+                }else{
+                //Fit height
+                  img.style.height = "100%";
+                }
+              }
+
+            }
+
+            img.onload = loadVisualization;
+
             return;
           }
           console.error("Unrecognized data", data);

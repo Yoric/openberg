@@ -1,38 +1,94 @@
 <!DOCTYPE HTML>
-<html> <head>
-<title>Openberg</title>
-<meta name="viewport" 
-  content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8" />
-<!-- External libraries -->
-<script src="lib/zip.js/WebContent/zip.js" type="text/javascript" defer="defer">
-</script>
-<script src="lib/promise/core.js" type="text/javascript" defer="defer">
-</script>
-<!-- Internal modules -->
-<script src="js/flipbook.js" type="text/javascript" defer="defer">
-</script>
-<script src="js/book.js" type="text/javascript" defer="defer">
-</script>
-<!-- Main -->
-<script src="js/main.js" type="text/javascript" defer="defer">
-</script>
-<link rel="stylesheet" type="text/css" href="css/style.css" />
+<html>
+<head>
+    <title>Openberg</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <!-- External libraries -->
+    <script src="lib/zip.js/WebContent/zip.js" defer="defer"></script>
+    <script src="lib/promise/core.js" defer="defer"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/jquery.smoothZoom.js"></script>
+    <!-- Internal modules -->
+    <script src="js/flipbook.js" defer="defer"></script>
+    <script src="js/book.js" defer="defer"></script>
+    <!-- Main -->
+    <script src="js/main.js" defer="defer"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
-<div id="openberg">
-<div id="welcome">
-  <h1 id="title">
-  Welcome to OpenBerg
-  </h1>
-   <div id="pick_file_tab" class="open">Open a file <input type="file" id="pick_file_control"/></div>
-</div>
+    <div class="menu_close" id="menu">
+	    <h1>OpenBerg</h1>
+		<h2>Options</h2>
+		<h3>Zoom</h3>
+		<div class="switch android">
+			<input id="zoom-on" name="zoom" type="radio" value="1" checked />
+			<label for="zoom-on">On</label>
 
-<div id="pages">
-  <div id="flipbook">
+			<input id="zoom-off" name="zoom" value="0" type="radio">
+			<label for="zoom-off">Off</label>
+
+			<span class="slide-button"></span>
+		</div>
+		<h3>Visualization</h3>
+		<div class="switch android">
+			<input id="fitwidth-width" name="fitwidth" type="radio" value="1" checked />
+			<label for="fitwidth-width">Fit width</label>
+
+			<input id="fitwidth-height" name="fitwidth" type="radio" value="0" />
+			<label for="fitwidth-height">Fit Height</label>
+
+			<span class="slide-button"></span>
+		</div>
+		<h3>Remember last page</h3>
+		<div class="switch android">
+			<input id="rememberpage-on" name="rememberpage" type="radio" value="1" checked />
+			<label for="rememberpage-on">On</label>
+
+			<input id="rememberpage-off" name="rememberpage" type="radio" value="0" />
+			<label for="rememberpage-off">Off</label>
+
+			<span class="slide-button"></span>
+		</div>
+		<h3>Offline visualization</h3>
+		<div class="switch android">
+			<input id="offline-on" name="offline" type="radio" value="1" checked />
+			<label for="offline-on">On</label>
+
+			<input id="offline-off" name="offline" type="radio" value="0" />
+			<label for="offline-off">Off</label>
+
+			<span class="slide-button"></span>
+		</div>
+		<!--
+		<h3>First time Tour</h3>
+		<div class="switch android">
+			<input id="tour-on" name="tour" type="radio" value="1" checked />
+			<label for="tour-on">On</label>
+
+			<input id="tour-off" name="tour" type="radio" value="0" />
+			<label for="tour-off">Off</label>
+
+			<span class="slide-button"></span>
+		</div>
+		-->
+		<h2>About</h2>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin urna leo, vulputate vel pellentesque sit amet, malesuada quis neque. In sagittis, lacus nec scelerisque adipiscing, urna mauris interdum urna, eu rhoncus erat turpis ac ipsum.
+		</p>
     </div>
-<div class="control" id="go_left"></div>
-<div class="control" id="go_right"></div>
-</div>
+    <div id="openberg">
+        <div id="pages">
+            <div id="flipbook">
+            </div>
+            <div class="control" id="go_left"></div>
+            <div class="control" id="go_right"></div>
+        </div>
+        <div id="welcome">
+            <h1 id="title"> Welcome to OpenBerg</h1>
+            <div id="pick_file_tab" class="open">Open a file <input type="file" id="pick_file_control"/></div>
+        </div>
+    </div>
+    <a id="menu-buton" class="" href="#"></a>
 </body>
 </html>

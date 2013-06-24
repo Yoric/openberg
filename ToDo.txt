@@ -1,0 +1,6 @@
+ToDo:
+- transition betwen pages with CSS - flipbook.js (76)? main.js(125)?
+- Slide para pasar de página
+- Menu - hacer que los botones funcionen :)
+- Mejorar la portada
+- Ocultar la barra de scroll

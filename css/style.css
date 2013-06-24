@@ -33,7 +33,6 @@ body {
 }
 
 #openberg {
-    text-align: right;
     font-family: monospace
     margin: 0;
     padding: 0;
@@ -73,29 +72,357 @@ body {
     padding: 0;
 }
 
-#pages img {
-    max-width: 100%;
-    max-height: 100%;
-}
-
 /*
 Controls
 */
 .control {
-    position:absolute;
-    bottom: 16px;
-    width: 32px;
-    height: 32px;
-    background-size: 32px 32px;
-    z-index: 10;
-    padding: 0;
-    margin: 0;
+    background: rgba(0,0,0,0); /* IE hack */
+    cursor: pointer;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 50px;
+    z-index: 3;
 }
 #go_left {
-    background-image: url("../img/arrow_left2.png");
     left: 0%;
 }
 #go_right {
-    background-image: url("../img/arrow_right2.png");
     right: 0%;
+}
+
+/*
+Image visualization
+*/
+#flipbook {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/*
+Left Menu
+*/
+/* Icon - http://icomoon.io/ */
+@font-face {
+    font-family: 'icomoon';
+    src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRk9UVE8AAAO8AAsAAAAABYAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAABCAAAAKAAAAC8unzc2UZGVE0AAAGoAAAAGgAAABxnx6McR0RFRgAAAcQAAAAdAAAAIAAwAARPUy8yAAAB5AAAAEsAAABgL9zcQGNtYXAAAAIwAAAAOgAAAVLgE/LMaGVhZAAAAmwAAAAuAAAANvypQQloaGVhAAACnAAAAB4AAAAkBBD/5GhtdHgAAAK8AAAADAAAAAwEAAAgbWF4cAAAAsgAAAAGAAAABgADUABuYW1lAAAC0AAAAN4AAAGGUNbz7XBvc3QAAAOwAAAADAAAACAAAwAAeJxljbEKglAYRr9fbyhy0RKNgqs01+ITtNUL5Bs0SaSLzS1Bwb/et2jtrXqBHxLKoFqazpnOISgFIvKrbbNvmhrkgLCUzJHclYli7bJWeYDpJn4y/0R7vBMr7cDgGBlgaHAaGfgGtxjq3fARYYzsUFeroih6rHt8Lt8ZQGe6wCVyZvPwKkm6kPLudeXjz0KWVnVWrBeKTThlHbwA3PY1w3icY2BgYGQAgjO2i86D6LNHGdRgNABG4QXsAAB4nGNgZGBg4ANiCQYQYGJgBEIQyQLmMQAABGAANQAAAHicY2BmYmCcwMDKwMHow5jGwMDgDqW/MkgytDAwMDGwMjPAgQCCyRCQ5prC4PCA4QMD44P/Dxj0GB8wKDQwMDDCFSgAISMAEEIMHwB4nGNgYGBmgGAZBkYGEPAB8hjBfBYGAyDNAYRMIIkHDB8Y/v9HZikwCjBBdYEBIxsDMndEAgDJXAiuAAB4nGNgZGBgAGLP0PZb8fw2Xxm4mRhA4OxRBjUE/f8BEwPjAyCXgwEsDQAZJwnqAAB4nGNgZGBgfPD/AYMeEwMDwz8GIAkUQQHMAG3nA/YAAAIAAAACAAAgAAAAAAAAUAAAAwAAeJx1jjFuwkAQRZ/BEEWJIqoo5Upp0tiyN9BwAB8gBT1CK8sSsNICUk5CxRFS5hg5QI6QY/Ax06RgpdG++ftn/gKPHMm4nIw7JsYD8ZvxkFc+jXPpX8YjHvgxHkv/kzPL76U89VMXHohfjIc0VMa59JPxiGe+jcfSf+lYEdmoIlvoVnETo+CDQMuBNUuS2tAe1ktB0/v2/Z3kCDg8pdIcc9X/fVfNM6VgpvLy1bxrTdzum5ja4HxZubmzXJGfFrPCV7VMt/62UGpip/drRt3nswhp12lHXVY3Z88ClznXAAB4nGNgZsALAAB9AAQ=) format('woff'),
+         url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAANAIAAAwBQRkZUTWfHoxwAAAVgAAAAHEdERUYAMgAGAAAFQAAAACBPUy8yL7rcHwAAAVgAAABWY21hcOAV89MAAAHEAAABUmdhc3D//wADAAAFOAAAAAhnbHlmR4001AAAAyQAAABQaGVhZPypQQkAAADcAAAANmhoZWEEEP/mAAABFAAAACRobXR4BKoAIAAAAbAAAAAUbG9jYQAaACgAAAMYAAAADG1heHAASgAPAAABOAAAACBuYW1lUNbz7QAAA3QAAAGGcG9zdJtVPjcAAAT8AAAAPAABAAAAAQAAThM+Pl8PPPUACwIAAAAAAM3FACYAAAAAzcUAJgAA/+ACAAHgAAAACAACAAAAAAAAAAEAAAHg/+AALgIAAAD+AAIAAAEAAAAAAAAAAAAAAAAAAAAFAAEAAAAFAAwAAwAAAAAAAgAAAAEAAQAAAEAAAAAAAAAAAQIAAZAABQAIAUwBZgAAAEcBTAFmAAAA9QAZAIQAAAIABQMAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUGZFZABA4ADwAAHg/+AALgHgACCAAAABAAAAAAAAAgAAAAAAAAAAqgAAAgAAIAAAAAAAAAADAAAAAwAAABwAAQAAAAAATAADAAEAAAAcAAQAMAAAAAgACAACAAAAAOAA8AD//wAAAADgAPAA//8AACADEAQAAQAAAAAAAAAAAAABBgAAAQAAAAAAAAABAgAAAAIAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGgAoAAMAIAAgAeABgAADAAcACwAAEyEVIRUhFSEVIRUhIAHA/kABwP5AAcD+QAGAYCBgIGAAAAABAAD/4AIAAeAAAgAAEQEhAgD+AAHg/gAAAAAAAAAMAJYAAQAAAAAAAQAHABAAAQAAAAAAAgAHACgAAQAAAAAAAwAjAHgAAQAAAAAABAAHAKwAAQAAAAAABQALAMwAAQAAAAAABgAHAOgAAwABBAkAAQAOAAAAAwABBAkAAgAOABgAAwABBAkAAwBGADAAAwABBAkABAAOAJwAAwABBAkABQAWALQAAwABBAkABgAOANgAaQBjAG8AbQBvAG8AbgAAaWNvbW9vbgAAUgBlAGcAdQBsAGEAcgAAUmVndWxhcgAARgBvAG4AdABGAG8AcgBnAGUAIAAyAC4AMAAgADoAIABpAGMAbwBtAG8AbwBuACAAOgAgADIANAAtADUALQAyADAAMQAzAABGb250Rm9yZ2UgMi4wIDogaWNvbW9vbiA6IDI0LTUtMjAxMwAAaQBjAG8AbQBvAG8AbgAAaWNvbW9vbgAAVgBlAHIAcwBpAG8AbgAgADEALgAwAABWZXJzaW9uIDEuMAAAaQBjAG8AbQBvAG8AbgAAaWNvbW9vbgAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAABAAIBAgEDB3VuaUUwMDAHdW5pRjAwMAAAAAH//wACAAEAAAAOAAAAGAAAAAAAAgABAAMABAABAAQAAAACAAAAAAABAAAAAMw9os8AAAAAzcUAJgAAAADNxQAm) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+a#menu-buton {
+    font-family: 'icomoon';
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    color: white;
+    font-size: 40px;
+    height: 50px;
+    left: -20px;
+    opacity: 0.2;
+    position: absolute;
+    text-decoration: none;
+    text-shadow: 0 0 5px #000000;
+    top: 0;
+    width: 60px;
+    z-index: 4;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+a#menu-buton:before {
+    content: "\e000";
+}
+a#menu-buton.menu_link_open {
+    left: 255px;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+}
+#menu {
+    position: fixed;
+    width: 260px;
+    height: 100%;
+    top: 0;
+    z-index: 1000;
+    left: -260px;
+    overflow: auto;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    font-size: 15px;
+    background: #333333;
+    color: white;
+    -webkit-box-shadow: inset 0 0 5px 5px #222222;
+    -moz-box-shadow: inset 0 0 5px 5px #222222;
+    box-shadow: inset 0 0 5px 5px #222222;
+}
+#menu.menu_open {
+    left: 0px;
+}
+#menu h1 {
+  font-size: 28px;
+  font-weight: normal;
+  padding: 0 5px;
+  margin: 10px 0;
+}
+#menu h2 {
+  font-size: 20px;
+  font-weight: normal;
+  padding: 0 5px;
+  margin: 10px 0;
+}
+#menu h3 {
+  font-size: 12px;
+  font-weight: normal;
+  padding: 0 15px;
+  margin: 0;
+  color: white;
+  line-height: 24px;
+}
+#menu p {
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+#menu p a {
+  color: rgba(255, 255, 255, 0.9);
+}
+#menu > p {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+/* ------------------------------------------
+CSS TOGGLE SWITCHES (Ionuț Colceriu)
+Licensed under Unlicense 
+https://github.com/ghinda/css-toggle-switch
+------------------------------------------ */
+
+/* Hide by default */
+
+.switch .slide-button,
+.toggle p span {
+  display: none;
+}
+
+/* Toggle Switches */
+
+/* We can't test for a specific feature,
+ * so we only target browsers with support for media queries.
+ */
+@media only screen {
+
+  /* Radio Switch
+   */
+  .switch {
+    position: relative;
+    padding: 0;
+  }
+  
+  .switch input {
+    position: absolute;
+    opacity: 0;
+  }
+  
+  .switch label {
+    position: relative;
+    z-index: 2;
+    
+    float: left;
+    width: 50%;
+    height: 100%;
+    
+    margin: 0;
+    text-align: center;
+  }
+
+  .switch .slide-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    z-index: 1;
+    
+    width: 50%;
+    height: 100%;
+  }
+
+  .switch input:last-of-type:checked ~ .slide-button {
+    left: 50%;
+  }
+
+  /* Switch with 3 items */
+  .switch.switch-three label,
+  .switch.switch-three .slide-button {
+    width: 33.3%;
+  }
+
+  .switch.switch-three input:checked:nth-of-type(2) ~ .slide-button { 
+    left: 33.3%;
+  }
+
+  .switch.switch-three input:checked:last-of-type ~ .slide-button {
+    left: 66.6%;
+  }
+  
+  /* Switch with 4 items */
+  .switch.switch-four label,
+  .switch.switch-four .slide-button {
+    width: 25%;
+  }
+
+  .switch.switch-four input:checked:nth-of-type(2) ~ .slide-button {  
+    left: 25%;
+  }
+  
+  .switch.switch-four input:checked:nth-of-type(3) ~ .slide-button {  
+    left: 50%;
+  }
+
+  .switch.switch-four input:checked:last-of-type ~ .slide-button {
+    left: 75%;
+  }
+  
+  /* Switch with 5 items */
+  .switch.switch-five label,
+  .switch.switch-five .slide-button {
+    width: 20%;
+  }
+
+  .switch.switch-five input:checked:nth-of-type(2) ~ .slide-button {  
+    left: 20%;
+  }
+  
+  .switch.switch-five input:checked:nth-of-type(3) ~ .slide-button {  
+    left: 40%;
+  }
+  
+  .switch.switch-five input:checked:nth-of-type(4) ~ .slide-button {  
+    left: 60%;
+  }
+
+  .switch.switch-five input:checked:last-of-type ~ .slide-button {
+    left: 80%;
+  }
+
+  /* Shared */
+  .toggle,
+  .switch {
+    display: block;
+    height: 30px;
+  }
+  
+  .switch *,
+  .toggle * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  
+  .switch .slide-button,
+  .toggle .slide-button {
+    display: block;
+    
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+  }
+  
+  .toggle label,
+  .toggle p,
+  .switch label {
+    line-height: 30px;
+    vertical-align: middle;
+  }
+  
+  .toggle input:checked ~ .slide-button {
+    right: 50%;
+  }
+  
+  /* Outline the toggles when the inputs are focused */
+  .toggle input:focus ~ .slide-button,
+  .switch input:focus + label {
+    outline: 1px dotted #888;
+  }
+  
+  /* Bugfix for older Webkit, including mobile Webkit. Adapted from:
+   * http://css-tricks.com/webkit-sibling-bug/
+   */
+  .switch, .toggle {
+    -webkit-animation: bugfix infinite 1s;
+  }
+  
+  @-webkit-keyframes bugfix { from { position: relative; } to { position: relative; } }
+
+  /* Android Theme
+   * Based on Holo
+   */
+   
+  .android {
+    background-color: #b6b6b6;
+    
+    color: #fff;
+  }
+
+  .android.toggle {
+    border: 2px solid #b6b6b6;
+  }
+
+  .android.switch {
+    overflow: hidden;
+  }
+    
+  .android.switch .slide-button {
+    background-color: #279fca;
+    
+    -webkit-transform: skew(20deg) translateX(10px);
+    -moz-transform: skew(20deg) translateX(10px);
+    -ms-transform: skew(20deg) translateX(10px);
+    transform: skew(20deg) translateX(10px);
+  }
+
+  .android.toggle .slide-button {
+    border-radius: 2px;
+    
+    background-color: #848484;
+  }
+
+  /* Selected ON toggle */
+  .android.toggle input:first-of-type:checked ~ .slide-button {
+    background-color: #279fca;
+  }
+
+  .android.switch input:first-of-type:checked ~ .slide-button {
+    -webkit-transform: skew(20deg) translateX(-10px);
+    -moz-transform: skew(20deg) translateX(-10px);
+    -ms-transform: skew(20deg) translateX(-10px);
+    transform: skew(20deg) translateX(-10px);
+  }
+
+  .android p {
+    color: #333;
+  }
+
+  .android span {
+    color: #fff;
+  }
+
+  .android.switch,
+  .android span {
+    text-transform: uppercase;
+  }
+
+  /* Fix Android/Holo Theme in firefox - force absolute position */
+  .android.switch input {
+    top: 0;
+    left: 0;
+  }
+  
 }
