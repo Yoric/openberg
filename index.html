@@ -19,6 +19,7 @@
 <body>
     <div class="menu_close" id="menu">
 	    <h1>OpenBerg</h1>
+	    <div id="pick_file_button" class="open">Open a ZIP or CBZ file <input type="file" id="pick_file_control"/></div>
 		<h2>Options</h2>
 		<h3>Zoom</h3>
 		<div class="switch android">
@@ -40,6 +41,7 @@
 
 			<span class="slide-button"></span>
 		</div>
+		<!--
 		<h3>Remember last page</h3>
 		<div class="switch android">
 			<input id="rememberpage-on" name="rememberpage" type="radio" value="1" checked />
@@ -50,17 +52,6 @@
 
 			<span class="slide-button"></span>
 		</div>
-		<h3>Offline visualization</h3>
-		<div class="switch android">
-			<input id="offline-on" name="offline" type="radio" value="1" checked />
-			<label for="offline-on">On</label>
-
-			<input id="offline-off" name="offline" type="radio" value="0" />
-			<label for="offline-off">Off</label>
-
-			<span class="slide-button"></span>
-		</div>
-		<!--
 		<h3>First time Tour</h3>
 		<div class="switch android">
 			<input id="tour-on" name="tour" type="radio" value="1" checked />
@@ -78,15 +69,16 @@
 		</p>
     </div>
     <div id="openberg">
-        <div id="pages">
+        <div id="pages" style="display: none;">
             <div id="flipbook">
             </div>
             <div class="control" id="go_left"></div>
             <div class="control" id="go_right"></div>
         </div>
         <div id="welcome">
-            <h1 id="title"> Welcome to OpenBerg</h1>
-            <div id="pick_file_tab" class="open">Open a file <input type="file" id="pick_file_control"/></div>
+            <h1>Welcome to OpenBerg</h1>
+            <h2>A ZIP / CBZ comic reader</h2>
+            <div id="pick_file_button_welcome" class="open"><div class="icon-download"></div><br />Open a ZIP or CBZ file</div>
         </div>
     </div>
     <a id="menu-buton" class="" href="#"></a>

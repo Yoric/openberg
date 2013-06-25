@@ -36,7 +36,16 @@
         function onSuccess(zip) {
           zip.getEntries(function onEntries(entries) {
             log("Pushing entries", entries);
-            self._rangeMap.push(entries);
+
+            // Examine files in zip and filtering content
+            var filterEntries = [];
+            for (var i = 0; i < entries.length; i++) {
+              if (entries[i].filename.indexOf("__MACOSX") != 0) {
+                filterEntries.push(entries[i]);
+              }
+            }
+
+            self._rangeMap.push(filterEntries);
             deferred.resolve();
           });
         },
@@ -84,6 +93,7 @@
               currentRange.length - 1);
           }
           var pageEntry = currentRange[page];
+
           console.log("Entry", pageEntry.filename);
           if (pageEntry.directory) {
             console.log("Entry is a directory");

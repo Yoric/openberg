@@ -1,6 +1,7 @@
 body {
     background-color:black;
     color: white;
+    font-family: tahoma,verdana,arial,sans-serif;
     height: 100%;
     overflow: hidden;
     margin: 0;
@@ -23,39 +24,40 @@ body {
 }
 
 /*
-  Open file tab
+  Open file button
 */
-.open:hover {
-    background-color: gray;
-}
-.open {
-    font-size: large;
-}
-
 #openberg {
-    font-family: monospace
     margin: 0;
     padding: 0;
 }
 
-
-
-#openberg #title {
-    height: 100%;
-    margin-top: auto;
-    margin-bottom: auto;
+#openberg #welcome h1, #openberg #welcome h2 {
+    margin-bottom: 50px;
+    text-align: center;
 }
-#openberg #pick {
-    border-top: thin white;
-    position: absolute;
-    bottom: 0%;
-    text-align: right;
-    width: 100%;
+#pick_file_button, #pick_file_button_welcome {
+    background-color: #279fca;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 15px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 auto;
+    max-width: 300px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 80%;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
-#pick_file_tab {
-    bottom: 0%;
-    position: absolute;
-    width: 100%;
+#pick_file_button_welcome {
+    height: 55px;
+    line-height: 10px;
+    padding: 20px 0;
+}
+#pick_file_button:hover, #pick_file_button_welcome:hover {
+    background-color: #848484;
 }
 #pick_file_control {
     display:none;
@@ -64,7 +66,7 @@ body {
 /*
   Pages
 */
-#pages {
+#openberg #pages {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -75,7 +77,7 @@ body {
 /*
 Controls
 */
-.control {
+#openberg #pages .control {
     background: rgba(0,0,0,0); /* IE hack */
     cursor: pointer;
     height: 100%;
@@ -84,40 +86,94 @@ Controls
     width: 50px;
     z-index: 3;
 }
-#go_left {
+#openberg #pages #go_left {
     left: 0%;
 }
-#go_right {
+#openberg #pages #go_right {
     right: 0%;
 }
 
 /*
 Image visualization
 */
-#flipbook {
+#openberg #flipbook {
     position: absolute;
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
     text-align: center;
+    overflow: hidden;
+}
+
+#openberg #flipbook img.fromLeft {
+    -webkit-animation: moveFromRight .6s ease both;
+    -moz-animation: moveFromRight .6s ease both;
+    animation: moveFromRight .6s ease both;
+}
+#openberg #flipbook img.fromRight {
+    -webkit-animation: moveFromLeft .6s ease both;
+    -moz-animation: moveFromLeft .6s ease both;
+    animation: moveFromLeft .6s ease both;
+}
+@-webkit-keyframes moveFromLeft {
+    from { -webkit-transform: translateX(-100%)}
+}
+@-moz-keyframes moveFromLeft {
+    from { -moz-transform: translateX(-100%)}
+}
+@keyframes moveFromLeft {
+    from { transform: translateX(-100%)}
+}
+@-webkit-keyframes moveFromRight {
+    from { -webkit-transform: translateX(100%)}
+}
+@-moz-keyframes moveFromRight {
+    from { -moz-transform: translateX(100%)}
+}
+@keyframes moveFromRight {
+    from { transform: translateX(100%)}
+}
+
+
+
+/* Icons Font - http://icomoon.io/ */
+@font-face {
+    font-family: 'icomoon';
+    src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRk9UVE8AAAQoAAsAAAAABgQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAABCAAAAP8AAAE07VuHiUZGVE0AAAIIAAAAGgAAABxoHAyQR0RFRgAAAiQAAAAcAAAAIAAyAARPUy8yAAACQAAAAEsAAABgL9zcQGNtYXAAAAKMAAAARQAAAVrAF/LjaGVhZAAAAtQAAAAtAAAANvz9qn1oaGVhAAADBAAAAB4AAAAkBBD/5GhtdHgAAAMkAAAAEAAAABAEAAAgbWF4cAAAAzQAAAAGAAAABgAFUABuYW1lAAADPAAAAN8AAAGGUNnz7nBvc3QAAAQcAAAADAAAACAAAwAAeJxlj71KxEAUhe/NTkxYQlaXGVEYf4pUrkVYeysVxNLpLLVZgpsmVj6AurcSUvkK0/oWadP5CD7AXJiAJqjbyCm+j1ucw0UQAhAxXtyW92W5BAwA4ZQPAj4c8Y6gZESJ2B/D7vX0i2gtSUQF11yFGl4nGmBTw9uWhljj8RQ2ho4YJrANe5DB7GG5uMjzvMf5GvMfnPzu/s0D4BM+4wuuIEQMkqPLVUpcia7mOkotSzVj8xl1xv+z1LXC+pYNWdeGN43yd/Ro/RkVV/0tTNm4SjVeUtHVRLZx8oOc8ML1CTvhjeo/spGv3Ltygnw2xGW9kpPNUFBLUpSMvwGDdXADAHicY2BgYGQAgjO2i86D6LPvTR7AaABS4QgcAAB4nGNgZGBg4ANiCQYQYGJgBEIWMAbxGAAEdgA3eJxjYGZiYJzAwMrAwejDmMbAwOAOpb8ySDK0MDAwMbAyM8CBAILJEJDmmsLg8IDhAwPjg/8PGPQYHzAoNDAwMMIVKAAhIwAQQgwfAHicY2BgYGaAYBkGRgYQCAHyGMF8FgYLIM3FwMHABIQMDxgeMH9g+P8fpAjIZoKwFZgUGAUYoXqhgJGNAVVgBAIAP2cKqAAAAHicY2BkYGAAYiWDrrR4fpuvDNxMDCBw9r3JAwT9/wETAyOIz8EAlgYALAwLXQAAAHicY2BkYGB88P8Bgx4TAwPDPwYgCRRBAcwAbecD9gAAAgAAAAAAAAACAAAgAAAAAAAAUAAABQAAeJx1jkFqAkEQRd/oaAgJwVXIsiGbbGaY6aALDzAHyMK9SDMMqA2tQk7iyiNkmWPkADlCjuF3rE0WNhT96vev+g08ciTjcjLumBgPxG/GQ175NM6lfxmPeODHeCz9T84sv5fy1E9deCB+MR7SUBnn0k/GI575Nh5L/6VjRWSjimyhW8VNjIIPAi0H1ixJakN7WC8FTe/b93eSI+DwlEpzzFX/9101z5SCmcrLV/OuNXG7b2Jqg/Nl5ebOckV+WswKX9Uy3frbQqmJnd6vGXWfzyKkXacddVndnD0DBF052wB4nGNgZsALAAB9AAQ=) format('woff'),
+       url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+a#menu-buton, .icon-folder, .icon-download {
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+a#menu-buton:before {
+    content: "\e000";
+}
+.icon-folder {
+    font-size: 68px;
+    margin-top: 100px;
+}
+.icon-folder:before {
+    content: "\e002";
+}
+.icon-download:before {
+    content: "\e003";
+    font-size: 32px;
 }
 
 /*
 Left Menu
 */
-/* Icon - http://icomoon.io/ */
-@font-face {
-    font-family: 'icomoon';
-    src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRk9UVE8AAAO8AAsAAAAABYAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAABCAAAAKAAAAC8unzc2UZGVE0AAAGoAAAAGgAAABxnx6McR0RFRgAAAcQAAAAdAAAAIAAwAARPUy8yAAAB5AAAAEsAAABgL9zcQGNtYXAAAAIwAAAAOgAAAVLgE/LMaGVhZAAAAmwAAAAuAAAANvypQQloaGVhAAACnAAAAB4AAAAkBBD/5GhtdHgAAAK8AAAADAAAAAwEAAAgbWF4cAAAAsgAAAAGAAAABgADUABuYW1lAAAC0AAAAN4AAAGGUNbz7XBvc3QAAAOwAAAADAAAACAAAwAAeJxljbEKglAYRr9fbyhy0RKNgqs01+ITtNUL5Bs0SaSLzS1Bwb/et2jtrXqBHxLKoFqazpnOISgFIvKrbbNvmhrkgLCUzJHclYli7bJWeYDpJn4y/0R7vBMr7cDgGBlgaHAaGfgGtxjq3fARYYzsUFeroih6rHt8Lt8ZQGe6wCVyZvPwKkm6kPLudeXjz0KWVnVWrBeKTThlHbwA3PY1w3icY2BgYGQAgjO2i86D6LNHGdRgNABG4QXsAAB4nGNgZGBg4ANiCQYQYGJgBEIQyQLmMQAABGAANQAAAHicY2BmYmCcwMDKwMHow5jGwMDgDqW/MkgytDAwMDGwMjPAgQCCyRCQ5prC4PCA4QMD44P/Dxj0GB8wKDQwMDDCFSgAISMAEEIMHwB4nGNgYGBmgGAZBkYGEPAB8hjBfBYGAyDNAYRMIIkHDB8Y/v9HZikwCjBBdYEBIxsDMndEAgDJXAiuAAB4nGNgZGBgAGLP0PZb8fw2Xxm4mRhA4OxRBjUE/f8BEwPjAyCXgwEsDQAZJwnqAAB4nGNgZGBgfPD/AYMeEwMDwz8GIAkUQQHMAG3nA/YAAAIAAAACAAAgAAAAAAAAUAAAAwAAeJx1jjFuwkAQRZ/BEEWJIqoo5Upp0tiyN9BwAB8gBT1CK8sSsNICUk5CxRFS5hg5QI6QY/Ax06RgpdG++ftn/gKPHMm4nIw7JsYD8ZvxkFc+jXPpX8YjHvgxHkv/kzPL76U89VMXHohfjIc0VMa59JPxiGe+jcfSf+lYEdmoIlvoVnETo+CDQMuBNUuS2tAe1ktB0/v2/Z3kCDg8pdIcc9X/fVfNM6VgpvLy1bxrTdzum5ja4HxZubmzXJGfFrPCV7VMt/62UGpip/drRt3nswhp12lHXVY3Z88ClznXAAB4nGNgZsALAAB9AAQ=) format('woff'),
-         url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAANAIAAAwBQRkZUTWfHoxwAAAVgAAAAHEdERUYAMgAGAAAFQAAAACBPUy8yL7rcHwAAAVgAAABWY21hcOAV89MAAAHEAAABUmdhc3D//wADAAAFOAAAAAhnbHlmR4001AAAAyQAAABQaGVhZPypQQkAAADcAAAANmhoZWEEEP/mAAABFAAAACRobXR4BKoAIAAAAbAAAAAUbG9jYQAaACgAAAMYAAAADG1heHAASgAPAAABOAAAACBuYW1lUNbz7QAAA3QAAAGGcG9zdJtVPjcAAAT8AAAAPAABAAAAAQAAThM+Pl8PPPUACwIAAAAAAM3FACYAAAAAzcUAJgAA/+ACAAHgAAAACAACAAAAAAAAAAEAAAHg/+AALgIAAAD+AAIAAAEAAAAAAAAAAAAAAAAAAAAFAAEAAAAFAAwAAwAAAAAAAgAAAAEAAQAAAEAAAAAAAAAAAQIAAZAABQAIAUwBZgAAAEcBTAFmAAAA9QAZAIQAAAIABQMAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUGZFZABA4ADwAAHg/+AALgHgACCAAAABAAAAAAAAAgAAAAAAAAAAqgAAAgAAIAAAAAAAAAADAAAAAwAAABwAAQAAAAAATAADAAEAAAAcAAQAMAAAAAgACAACAAAAAOAA8AD//wAAAADgAPAA//8AACADEAQAAQAAAAAAAAAAAAABBgAAAQAAAAAAAAABAgAAAAIAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGgAoAAMAIAAgAeABgAADAAcACwAAEyEVIRUhFSEVIRUhIAHA/kABwP5AAcD+QAGAYCBgIGAAAAABAAD/4AIAAeAAAgAAEQEhAgD+AAHg/gAAAAAAAAAMAJYAAQAAAAAAAQAHABAAAQAAAAAAAgAHACgAAQAAAAAAAwAjAHgAAQAAAAAABAAHAKwAAQAAAAAABQALAMwAAQAAAAAABgAHAOgAAwABBAkAAQAOAAAAAwABBAkAAgAOABgAAwABBAkAAwBGADAAAwABBAkABAAOAJwAAwABBAkABQAWALQAAwABBAkABgAOANgAaQBjAG8AbQBvAG8AbgAAaWNvbW9vbgAAUgBlAGcAdQBsAGEAcgAAUmVndWxhcgAARgBvAG4AdABGAG8AcgBnAGUAIAAyAC4AMAAgADoAIABpAGMAbwBtAG8AbwBuACAAOgAgADIANAAtADUALQAyADAAMQAzAABGb250Rm9yZ2UgMi4wIDogaWNvbW9vbiA6IDI0LTUtMjAxMwAAaQBjAG8AbQBvAG8AbgAAaWNvbW9vbgAAVgBlAHIAcwBpAG8AbgAgADEALgAwAABWZXJzaW9uIDEuMAAAaQBjAG8AbQBvAG8AbgAAaWNvbW9vbgAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAABAAIBAgEDB3VuaUUwMDAHdW5pRjAwMAAAAAH//wACAAEAAAAOAAAAGAAAAAAAAgABAAMABAABAAQAAAACAAAAAAABAAAAAMw9os8AAAAAzcUAJgAAAADNxQAm) format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
 a#menu-buton {
-    font-family: 'icomoon';
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
     color: white;
     font-size: 40px;
     height: 50px;
@@ -133,10 +189,8 @@ a#menu-buton {
     -moz-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
-a#menu-buton:before {
-    content: "\e000";
-}
 a#menu-buton.menu_link_open {
+    background: black;
     left: 255px;
     width: 100%;
     height: 100%;
@@ -154,7 +208,7 @@ a#menu-buton.menu_link_open {
     -moz-transition: all 0.3s ease;
     transition: all 0.3s ease;
 
-    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    font-family: tahoma, verdana, arial, sans-serif;
     font-size: 15px;
     background: #333333;
     color: white;
@@ -390,7 +444,6 @@ https://github.com/ghinda/css-toggle-switch
 
   .android.toggle .slide-button {
     border-radius: 2px;
-    
     background-color: #848484;
   }
 

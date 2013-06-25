@@ -14,6 +14,7 @@
     this._previousPage = -1;
     this._parent = parent;
     this._readerOptions = readerOptions;
+    this._displayClass = "fromLeft";
   };
 
   FlipBook.prototype = {
@@ -59,6 +60,12 @@
     get readerOptions() {
       return this._readerOptions;
     },
+    set displayClass(option) {
+      this._displayClass = option;
+    },
+    get displayClass() {
+      return this._displayClass;
+    },
     display: function display() {
       console.log("Display of page", this.page,
       "has been requested - I come from page", this._previousPage);
@@ -67,6 +74,7 @@
       var self = this;
       var eltPages = this._parent;
       var readerOptions = this.readerOptions;
+      var displayClass = this.displayClass;
       
       eltPages.classList.add("loading");
       return Promise.withLog(promise.then(
@@ -79,7 +87,7 @@
           eltPages.classList.remove("loading");
           if ("directory" in data) {
             log("Page is a directory", data.directory);
-            eltPages.textContent = "Directory " + data.directory;
+            eltPages.innerHTML = "<div class='icon-folder'></div><br/>" + "Directory " + data.directory;
             return;
           }
           if ("imgURL" in data) {
@@ -87,6 +95,7 @@
             var date1 = Date.now();
             eltPages.innerHTML = "";
             var img = document.createElement("img");
+            img.classList.add(displayClass);
             eltPages.appendChild(img);
             img.src = data.imgURL;
 
@@ -119,8 +128,11 @@
               // Zoom OFF
                 if (readerOptions.fitwidth) {
                 //Fit width
-                  eltPages.style.overflow = "auto";
+                  eltPages.style.overflowY = "auto";
                   img.style.width = "100%";
+                  eltPages.style.width = eltPages.parentElement.clientWidth + $.scrollbarWidth() + "px";
+                  console.log(eltPages.parentElement.clientWidth);
+                  console.log($.scrollbarWidth());
                 }else{
                 //Fit height
                   img.style.height = "100%";
