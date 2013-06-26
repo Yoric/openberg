@@ -19,7 +19,10 @@
 <body>
     <div class="menu_close" id="menu">
 	    <h1>OpenBerg</h1>
-	    <div id="pick_file_button" class="open">Open a ZIP or CBZ file <input type="file" id="pick_file_control"/></div>
+	    <p>File: <span id="fileName"></span></p>
+	    <p>Actual Page: <span id="actualPage"></span></p>
+	    <p>Total Pages: <span id="filePages"></span></p>
+	    <div id="pick_file_button" class="open">Open another file<input type="file" id="pick_file_control"/></div>
 		<h2>Options</h2>
 		<h3>Zoom</h3>
 		<div class="switch android">
@@ -41,7 +44,6 @@
 
 			<span class="slide-button"></span>
 		</div>
-		<!--
 		<h3>Remember last page</h3>
 		<div class="switch android">
 			<input id="rememberpage-on" name="rememberpage" type="radio" value="1" checked />
@@ -52,6 +54,7 @@
 
 			<span class="slide-button"></span>
 		</div>
+		<!--
 		<h3>First time Tour</h3>
 		<div class="switch android">
 			<input id="tour-on" name="tour" type="radio" value="1" checked />
@@ -81,6 +84,6 @@
             <div id="pick_file_button_welcome" class="open"><div class="icon-download"></div><br />Open a ZIP or CBZ file</div>
         </div>
     </div>
-    <a id="menu-buton" class="" href="#"></a>
+    <div id="menu-buton"></div>
 </body>
 </html>

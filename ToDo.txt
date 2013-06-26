@@ -1,4 +1,4 @@
 ToDo:
-- transition betwen pages with CSS (in progress)
-- Slide para pasar de página
 - Mejorar la portada
+
+- Navegar con las teclas

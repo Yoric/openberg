@@ -14,7 +14,7 @@
     this._previousPage = -1;
     this._parent = parent;
     this._readerOptions = readerOptions;
-    this._displayClass = "fromLeft";
+    this._displayClass = "left";
   };
 
   FlipBook.prototype = {
@@ -75,8 +75,8 @@
       var eltPages = this._parent;
       var readerOptions = this.readerOptions;
       var displayClass = this.displayClass;
+      var bookName = this.book.bookName;
       
-      eltPages.classList.add("loading");
       return Promise.withLog(promise.then(
         function onSuccess(data) {
           var log = window.console.log.bind(window.console, "display onSucess");
@@ -84,64 +84,81 @@
           if (page != self.page) {
             log("FIXME", "Do not display", pageNum, "we have moved away from that page");
           }
-          eltPages.classList.remove("loading");
+          eltPages.className = "removeImage " + displayClass;
           if ("directory" in data) {
             log("Page is a directory", data.directory);
             eltPages.innerHTML = "<div class='icon-folder'></div><br/>" + "Directory " + data.directory;
+            
+            //Remove class to fire css effect
+            eltPages.classList.remove("removeImage");
             return;
           }
           if ("imgURL" in data) {
             log("Page is an image");
             var date1 = Date.now();
-            eltPages.innerHTML = "";
-            var img = document.createElement("img");
-            img.classList.add(displayClass);
-            eltPages.appendChild(img);
-            img.src = data.imgURL;
+            
+            setTimeout(function() {
+              
+              eltPages.innerHTML = "";
+              var img = document.createElement("img");
+              eltPages.appendChild(img);
+              eltPages.scrollTop = 0;
+              eltPages.style.overflowY = "hidden";
+              eltPages.style.width = "100%";
+              img.src = data.imgURL;
 
-            // Visualization
-            function loadVisualization() {
-              if (readerOptions.zoom) {
-              // Zoom ON
-                if (readerOptions.fitwidth) {
-                //Fit width
-                  var divSize = eltPages.clientWidth;
-                  var imgSize = img.naturalWidth ;
-                  var percentResponsive = (divSize*100)/imgSize;
+              // Type of Visualization
+              function loadVisualization() {
+                if (readerOptions.zoom) {
+                // Zoom ON
+                  if (readerOptions.fitwidth) {
+                  //Fit width
+                    var divSize = eltPages.clientWidth;
+                    var imgSize = img.naturalWidth ;
+                    var percentResponsive = (divSize*100)/imgSize;
+                  }else{
+                  //Fit height
+                    percentResponsive = "";
+                  }
+
+                  $(img).smoothZoom( {
+                      zoom_MAX: 400,
+                      responsive: true,
+                      background_COLOR: "#000",
+                      border_SIZE: 0,
+                      zoom_BUTTONS_SHOW: false,
+                      pan_BUTTONS_SHOW: false,
+                      initial_ZOOM: percentResponsive,
+                      initial_POSITION: "0 0"
+                  } );
+
                 }else{
-                //Fit height
-                  percentResponsive = "";
+                // Zoom OFF
+                  if (readerOptions.fitwidth) {
+                  //Fit width
+                    eltPages.style.overflowY = "auto";
+                    img.style.width = "100%";
+                    eltPages.style.width = eltPages.parentElement.clientWidth + $.scrollbarWidth() + "px";
+                  }else{
+                  //Fit height
+                    img.style.height = "100%";
+                  }
                 }
 
-                $(img).smoothZoom( {
-                    zoom_MAX: 400,
-                    responsive: true,
-                    background_COLOR: "#000",
-                    border_SIZE: 0,
-                    zoom_BUTTONS_SHOW: false,
-                    pan_BUTTONS_SHOW: false,
-                    initial_ZOOM: percentResponsive,
-                    initial_POSITION: "0 0"
-                } );
-
-              }else{
-              // Zoom OFF
-                if (readerOptions.fitwidth) {
-                //Fit width
-                  eltPages.style.overflowY = "auto";
-                  img.style.width = "100%";
-                  eltPages.style.width = eltPages.parentElement.clientWidth + $.scrollbarWidth() + "px";
-                  console.log(eltPages.parentElement.clientWidth);
-                  console.log($.scrollbarWidth());
-                }else{
-                //Fit height
-                  img.style.height = "100%";
-                }
               }
 
-            }
+              img.onload = loadVisualization;
 
-            img.onload = loadVisualization;
+              //Remove class to fire css effect
+              eltPages.classList.remove("removeImage");
+
+              // Save actual page in LocalStorage
+              if ( typeof(Storage)!=="undefined"  && readerOptions.rememberpage) {
+                localStorage.setItem( bookName + "_page", page );
+              }
+
+            },300);
+            
 
             return;
           }

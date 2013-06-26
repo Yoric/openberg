@@ -22,6 +22,8 @@
     this._rangeMap = [];
     this._status = null;
     this._updateEntries();
+    this._totalPages = 0;
+    this._bookName = "";
   };
   Book.prototype = {
     /**
@@ -31,6 +33,7 @@
     _updateEntries: function _updateEntries() {
       var deferred = Promise.defer();
       var self = this;
+      var totalPages = 0;
       obj.zip.createReader(
         new obj.zip.BlobReader(this._files[this._filesProcessed++]),
         function onSuccess(zip) {
@@ -42,10 +45,13 @@
             for (var i = 0; i < entries.length; i++) {
               if (entries[i].filename.indexOf("__MACOSX") != 0) {
                 filterEntries.push(entries[i]);
+                totalPages ++;
               }
             }
 
             self._rangeMap.push(filterEntries);
+
+            self._totalPages = totalPages;
             deferred.resolve();
           });
         },
@@ -54,6 +60,15 @@
           deferred.reject();
         });
       return self._status = deferred.promise;
+    },
+    get totalPages() {
+      return this._totalPages;
+    },
+    set bookName(name) {
+      this._bookName = name;
+    },
+    get bookName() {
+      return this._bookName;
     },
     displayPage: function displayPage(page) {
       // Search page in range map

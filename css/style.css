@@ -104,35 +104,69 @@ Image visualization
     padding: 0;
     text-align: center;
     overflow: hidden;
+    opacity: 0;
 }
 
-#openberg #flipbook img.fromLeft {
-    -webkit-animation: moveFromRight .6s ease both;
-    -moz-animation: moveFromRight .6s ease both;
-    animation: moveFromRight .6s ease both;
+#openberg #flipbook.left {
+    -webkit-animation: moveFromRight .5s ease-out both;
+    -moz-animation: moveFromRight .5s ease-out both;
+    animation: moveFromRight .5s ease-out both;
+    opacity: 1;
 }
-#openberg #flipbook img.fromRight {
-    -webkit-animation: moveFromLeft .6s ease both;
-    -moz-animation: moveFromLeft .6s ease both;
-    animation: moveFromLeft .6s ease both;
+#openberg #flipbook.right {
+    -webkit-animation: moveFromLeft .5s ease-out both;
+    -moz-animation: moveFromLeft .5s ease-out both;
+    animation: moveFromLeft .5s ease-out both;
+    opacity: 1;
+}
+#openberg #flipbook.left.removeImage {
+    -webkit-animation: removeFromRight .3s ease-in both;
+    -moz-animation: removeFromRight .3s ease-in both;
+    animation: removeFromRight .3s ease-in both;
+    opacity: 1;
+}
+#openberg #flipbook.right.removeImage {
+    -webkit-animation: removeFromLeft .3s ease-in both;
+    -moz-animation: removeFromLeft .3s ease-in both;
+    animation: removeFromLeft .3s ease-in both;
+    opacity: 1;
 }
 @-webkit-keyframes moveFromLeft {
-    from { -webkit-transform: translateX(-100%)}
+    from { -webkit-transform: translateX(-100%); opacity: 0;}
 }
 @-moz-keyframes moveFromLeft {
-    from { -moz-transform: translateX(-100%)}
+    from { -moz-transform: translateX(-100%); opacity: 0;}
 }
 @keyframes moveFromLeft {
-    from { transform: translateX(-100%)}
+    from { transform: translateX(-100%); opacity: 0;}
 }
 @-webkit-keyframes moveFromRight {
-    from { -webkit-transform: translateX(100%)}
+    from { -webkit-transform: translateX(100%); opacity: 0;}
 }
 @-moz-keyframes moveFromRight {
-    from { -moz-transform: translateX(100%)}
+    from { -moz-transform: translateX(100%); opacity: 0;}
 }
 @keyframes moveFromRight {
-    from { transform: translateX(100%)}
+    from { transform: translateX(100%); opacity: 0;}
+}
+
+@-webkit-keyframes removeFromLeft {
+    to { -webkit-transform: translateX(100%); opacity: 0;}
+}
+@-moz-keyframes removeFromLeft {
+    to { -moz-transform: translateX(100%); opacity: 0;}
+}
+@keyframes removeFromLeft {
+    to { transform: translateX(100%); opacity: 0;}
+}
+@-webkit-keyframes removeFromRight {
+    to { -webkit-transform: translateX(-100%); opacity: 0;}
+}
+@-moz-keyframes removeFromRight {
+    to { -moz-transform: translateX(-100%); opacity: 0;}
+}
+@keyframes removeFromRight {
+    to { transform: translateX(-100%); opacity: 0;}
 }
 
 
@@ -145,7 +179,7 @@ Image visualization
     font-weight: normal;
     font-style: normal;
 }
-a#menu-buton, .icon-folder, .icon-download {
+#menu-buton, .icon-folder, .icon-download {
     font-family: 'icomoon';
     speak: none;
     font-style: normal;
@@ -155,7 +189,7 @@ a#menu-buton, .icon-folder, .icon-download {
     line-height: 1;
     -webkit-font-smoothing: antialiased;
 }
-a#menu-buton:before {
+#menu-buton:before {
     content: "\e000";
 }
 .icon-folder {
@@ -173,8 +207,9 @@ a#menu-buton:before {
 /*
 Left Menu
 */
-a#menu-buton {
+#menu-buton {
     color: white;
+    cursor: pointer;
     font-size: 40px;
     height: 50px;
     left: -20px;
@@ -185,17 +220,27 @@ a#menu-buton {
     top: 0;
     width: 60px;
     z-index: 4;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    transition: all 0.3s ease;
 }
-a#menu-buton.menu_link_open {
+#menu-buton.menu_link_open {
     background: black;
     left: 255px;
     width: 100%;
     height: 100%;
     opacity: 0.8;
+    -webkit-animation: animateMenu .6s ease both;
+    -moz-animation: animateMenu .6s ease both;
+    animation: animateMenu .6s ease both;
 }
+@-webkit-keyframes animateMenu {
+    from { height: 100%; opacity: 0.2; left: 0;}
+}
+@-moz-keyframes animateMenu {
+    from { height: 100%; opacity: 0.2; left: 0;}
+}
+@keyframes animateMenu {
+    from { height: 100%; opacity: 0.2; left: 0;}
+}
+
 #menu {
     position: fixed;
     width: 260px;
@@ -220,35 +265,39 @@ a#menu-buton.menu_link_open {
     left: 0px;
 }
 #menu h1 {
-  font-size: 28px;
-  font-weight: normal;
-  padding: 0 5px;
-  margin: 10px 0;
+    font-size: 28px;
+    font-weight: normal;
+    padding: 0 5px;
+    margin: 10px 0;
 }
 #menu h2 {
-  font-size: 20px;
-  font-weight: normal;
-  padding: 0 5px;
-  margin: 10px 0;
+    font-size: 20px;
+    font-weight: normal;
+    padding: 0 5px;
+    margin: 10px 0;
 }
 #menu h3 {
-  font-size: 12px;
-  font-weight: normal;
-  padding: 0 15px;
-  margin: 0;
-  color: white;
-  line-height: 24px;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 0 15px;
+    margin: 0;
+    color: white;
+    line-height: 24px;
 }
 #menu p {
-  font-size: 13px;
-  margin: 0 0 12px;
+    font-size: 13px;
+    margin: 0 0 12px;
+    word-wrap: break-word;
 }
 #menu p a {
-  color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.9);
 }
 #menu > p {
-  margin-left: 15px;
-  margin-right: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+#menu #fileName {
+    font-weight: bold;
 }
 
 /* ------------------------------------------

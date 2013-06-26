@@ -38,6 +38,9 @@
   var eltFilePickerButtonWel = document.getElementById("pick_file_button_welcome");
   var eltMenuLink = document.getElementById("menu-buton");
   var eltMenu = document.getElementById("menu");
+  var eltMenuFile = document.getElementById("fileName");
+  var eltMenuPages = document.getElementById("filePages");
+  var eltMenuActualPage = document.getElementById("actualPage");
   var eltPages = document.getElementById("pages");
   var eltFlip = document.getElementById("flipbook");
   var eltWelcome = document.getElementById("welcome");
@@ -92,11 +95,21 @@
     }
     var files = [];
     var i;
+    var savedPage = 0;
     for (i = 0; i < eltFilePickerControl.files.length; ++i) {
       files.push(eltFilePickerControl.files[i]);
     }
     flipBook.book = new obj.Book(files);
-    flipBook.page = 0;
+    flipBook.book.bookName = files[0].name.replace(/[\. ,:-]+/g, "_");
+
+    // Check if last page is saved in localStorage
+    if ( typeof(Storage)!=="undefined"  && flipBook.readerOptions.rememberpage && localStorage.getItem(flipBook.book.bookName + "_page")) {
+      savedPage = parseInt(localStorage.getItem(flipBook.book.bookName + "_page"));
+      flipBook.page = savedPage;
+    }
+
+    flipBook.page = savedPage;
+
     flipBook.display().then(
       function onSuccess() {
         // The page was displayed correctly, hide the welcome screen
@@ -115,32 +128,44 @@
     var displayClass;
     if ("keyCode" in event || "which" in event) {
       code = event.keyCode || event.which;
-      if ( // FIXME: Chrome doesn't define KeyEvent
-        code == KeyEvent.DOM_VK_DOWN
-          || code == KeyEvent.DOM_VK_PAGE_DOWN
-          || code == KeyEvent.DOM_VK_SPACE
-         ) {
-           delta = 1;
-      } else if (
-        code == KeyEvent.DOM_VK_UP
-          || code == KeyEvent.DOM_VK_PAGE_UP
-          || code == KeyEvent.DOM_VK_BACK_SPACE
-      ) {
-        delta = -1;
+      if (code == KeyEvent.DOM_VK_DOWN || code == KeyEvent.DOM_VK_PAGE_DOWN) {
+        eltFlip.scrollTop += 30;
+      } else if (code == KeyEvent.DOM_VK_UP || code == KeyEvent.DOM_VK_PAGE_UP) {
+        eltFlip.scrollTop -= 30;
       } else if (code == KeyEvent.DOM_VK_RIGHT) {
         delta = Options.ltr?1:-1;
-        displayClass = "fromLeft";
+        displayClass = "left";
+        movePage(delta, displayClass);
       } else if (code == KeyEvent.DOM_VK_LEFT) {
         delta = Options.ltr?-1:1;
-        displayClass = "fromRight";
+        displayClass = "right";
+        movePage(delta, displayClass);
       } else {
         return;
       }
-      movePage(delta, displayClass);
     }
   };
 
   document.addEventListener("keypress", onkey);
+
+  /**
+  * Open / Cose Menu
+  */ 
+  var openmenu = function openmenu(){
+    if (eltMenu.className == 'menu_open') {
+      eltMenu.className = 'menu_close';
+      eltMenuLink.className = 'menu_link_close';
+    }else{
+      eltMenu.className = 'menu_open';
+      eltMenuLink.className = 'menu_link_open';
+    }
+    if(flipBook.book){
+      eltMenuFile.textContent = flipBook.book.bookName;
+      eltMenuPages.textContent = flipBook.book.totalPages -1;
+      eltMenuActualPage.textContent = flipBook.page;
+    }
+  }
+  eltMenuLink.addEventListener("click", openmenu );
 
   /**
    * Mouse/touch
@@ -149,39 +174,34 @@
     if (flipBook.book == null) {
       return;
     }
+    // if we try to pass the first or the last page
+    if (flipBook.page + delta >= 0 && flipBook.page + delta < flipBook.book.totalPages) {
 
-    flipBook.page += delta;
-    flipBook.displayClass = displayClass;
-    flipBook.display().then(
-      function onSuccess() {
-        // Back into the book
-        eltPages.style.display = null;
-        eltWelcome.style.display = "none";
-      },
-      function onFailure(e) {
-        if (!(e instanceof obj.Book.NoSuchPageError)) {
-          console.error("Cannot handle error", e);
+      flipBook.page += delta;
+      flipBook.displayClass = displayClass;
+      flipBook.display().then(
+        function onSuccess() {
+          // Back into the book
+          eltPages.style.display = null;
+          eltWelcome.style.display = "none";
+        },
+        function onFailure(e) {
+          if (!(e instanceof obj.Book.NoSuchPageError)) {
+            console.error("Cannot handle error", e);
+          }
+          // We have left the book
+          eltPages.style.display = "none";
+          eltFlip.className = "";
+          eltWelcome.style.display = null;
         }
-        // We have left the book
-        eltPages.style.display = "none";
-        eltWelcome.style.display = null;
-      }
-    );
-  };
-
-  /**
-  * Open / Cose Menu
-  */ 
-  eltMenuLink.addEventListener("click", function oncommand(e) {
-    if (eltMenu.className == 'menu_open') {
-      eltMenu.className = 'menu_close';
-      eltMenuLink.className = 'menu_link_close';
-    }else{
-      eltMenu.className = 'menu_open';
-      eltMenuLink.className = 'menu_link_open';
+      );
+    } else {
+      console.log("End of the book");
+      openmenu();
     }
-    e.preventDefault();
-  });
+
+
+  };
 
   /**
    * Option inputs
@@ -215,11 +235,11 @@
     if (e.target == eltRight) {
       delta = Options.ltr?1:-1;
       e.stopPropagation();
-      movePage(delta,"fromLeft");
+      movePage(delta,"left");
     } else if (e.target == eltLeft) {
       delta = Options.ltr?-1:1;
       e.stopPropagation();
-      movePage(delta, "fromRight");
+      movePage(delta, "right");
     }
   };
   // Touchable events
