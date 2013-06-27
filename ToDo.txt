@@ -1,4 +1,0 @@
-ToDo:
-- Mejorar la portada
-
-- Navegar con las teclas

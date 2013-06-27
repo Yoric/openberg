@@ -88,7 +88,7 @@
           if ("directory" in data) {
             log("Page is a directory", data.directory);
             eltPages.innerHTML = "<div class='icon-folder'></div><br/>" + "Directory " + data.directory;
-            
+
             //Remove class to fire css effect
             eltPages.classList.remove("removeImage");
             return;
@@ -159,7 +159,6 @@
 
             },300);
             
-
             return;
           }
           console.error("Unrecognized data", data);
