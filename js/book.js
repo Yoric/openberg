@@ -43,6 +43,7 @@
             // Examine files in zip and filtering content
             var filterEntries = [];
             for (var i = 0; i < entries.length; i++) {
+              // Not include MAC system files inside the zip if any
               if (entries[i].filename.indexOf("__MACOSX") != 0) {
                 filterEntries.push(entries[i]);
                 totalPages ++;
@@ -62,12 +63,22 @@
       return self._status = deferred.promise;
     },
     get totalPages() {
+      /**
+       * Get the total number of pages / files in the zip
+       */
       return this._totalPages;
     },
     set bookName(name) {
+      /**
+       * Set the name of the book
+       * return void
+       */
       this._bookName = name;
     },
     get bookName() {
+      /**
+       * Get the name of the book
+       */
       return this._bookName;
     },
     displayPage: function displayPage(page) {

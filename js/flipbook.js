@@ -76,7 +76,7 @@
       var readerOptions = this.readerOptions;
       var displayClass = this.displayClass;
       var bookName = this.book.bookName;
-      
+
       return Promise.withLog(promise.then(
         function onSuccess(data) {
           var log = window.console.log.bind(window.console, "display onSucess");
@@ -87,7 +87,14 @@
           eltPages.className = "removeImage " + displayClass;
           if ("directory" in data) {
             log("Page is a directory", data.directory);
-            eltPages.innerHTML = "<div class='icon-folder'></div><br/>" + "Directory " + data.directory;
+            var dir = document.createElement("DIV");
+            dir.classList.add("icon-folder");
+            var dirbr = document.createElement('br');
+            var dirtxt = document.createTextNode("Directory " + data.directory);
+
+            eltPages.appendChild(dir);
+            eltPages.appendChild(dirbr);
+            eltPages.appendChild(dirtxt);
 
             //Remove class to fire css effect
             eltPages.classList.remove("removeImage");
@@ -96,69 +103,54 @@
           if ("imgURL" in data) {
             log("Page is an image");
             var date1 = Date.now();
-            
-            setTimeout(function() {
-              
-              eltPages.innerHTML = "";
-              var img = document.createElement("img");
-              eltPages.appendChild(img);
-              eltPages.scrollTop = 0;
-              eltPages.style.overflowY = "hidden";
-              eltPages.style.width = "100%";
-              img.src = data.imgURL;
 
-              // Type of Visualization
-              function loadVisualization() {
-                if (readerOptions.zoom) {
-                // Zoom ON
-                  if (readerOptions.fitwidth) {
-                  //Fit width
-                    var divSize = eltPages.clientWidth;
-                    var imgSize = img.naturalWidth ;
-                    var percentResponsive = (divSize*100)/imgSize;
-                  }else{
-                  //Fit height
-                    percentResponsive = "";
-                  }
+            eltPages.innerHTML = "";
+            var img = document.createElement("img");
+            eltPages.appendChild(img);
+            eltPages.scrollTop = 0;
+            eltPages.style.overflowY = "hidden";
+            eltPages.style.width = "100%";
+            img.src = data.imgURL;
 
-                  $(img).smoothZoom( {
-                      zoom_MAX: 400,
-                      responsive: true,
-                      background_COLOR: "#000",
-                      border_SIZE: 0,
-                      zoom_BUTTONS_SHOW: false,
-                      pan_BUTTONS_SHOW: false,
-                      initial_ZOOM: percentResponsive,
-                      initial_POSITION: "0 0"
-                  } );
-
-                }else{
-                // Zoom OFF
-                  if (readerOptions.fitwidth) {
-                  //Fit width
-                    eltPages.style.overflowY = "auto";
-                    img.style.width = "100%";
-                    eltPages.style.width = eltPages.parentElement.clientWidth + $.scrollbarWidth() + "px";
-                  }else{
-                  //Fit height
-                    img.style.height = "100%";
-                  }
+            // Type of Visualization
+            function loadVisualization() {
+              if (readerOptions.zoom) {
+              // Zoom ON
+              // Fixme - zoom deactivated - search for an open source solution or make our own
+                 if (readerOptions.fitwidth) {
+                //Fit width
+                  eltPages.style.overflowY = "auto";
+                  img.style.width = "100%";
+                  eltPages.style.width = eltPages.parentElement.clientWidth + $.scrollbarWidth() + "px";
+                } else {
+                //Fit height
+                  img.style.height = "100%";
                 }
-
+              } else {
+              // Zoom OFF
+                if (readerOptions.fitwidth) {
+                //Fit width
+                  eltPages.style.overflowY = "auto";
+                  img.style.width = "100%";
+                  eltPages.style.width = eltPages.parentElement.clientWidth + $.scrollbarWidth() + "px";
+                } else {
+                //Fit height
+                  img.style.height = "100%";
+                }
               }
 
-              img.onload = loadVisualization;
+            }
 
-              //Remove class to fire css effect
-              eltPages.classList.remove("removeImage");
+            img.onload = loadVisualization;
 
-              // Save actual page in LocalStorage
-              if ( typeof(Storage)!=="undefined"  && readerOptions.rememberpage) {
-                localStorage.setItem( bookName + "_page", page );
-              }
+            //Remove class to fire css effect
+            eltPages.classList.remove("removeImage");
 
-            },300);
-            
+            // Save actual page in LocalStorage
+            if ( typeof(Storage)!=="undefined"  && readerOptions.rememberpage) {
+              localStorage.setItem( bookName + "_page", page );
+            }
+
             return;
           }
           console.error("Unrecognized data", data);

@@ -7,8 +7,7 @@
     <!-- External libraries -->
     <script src="lib/zip.js/WebContent/zip.js" defer="defer"></script>
     <script src="lib/promise/core.js" defer="defer"></script>
-    <script src="lib/jquery.min.js"></script>
-    <script src="lib/jquery.smoothZoom.js"></script>
+    <script src="lib/jquery.min.js" defer="defer"></script>
     <!-- Internal modules -->
     <script src="js/flipbook.js" defer="defer"></script>
     <script src="js/book.js" defer="defer"></script>
@@ -20,10 +19,12 @@
     <div class="menu_close" id="menu">
 	    <h1>OpenBerg</h1>
 	    <p>File: <span id="fileName"></span></p>
-	    <p>Actual Page: <span id="actualPage"></span></p>
+	    <p>Current Page: <span id="actualPage"></span></p>
 	    <p>Total Pages: <span id="filePages"></span></p>
 	    <div id="pick_file_button" class="open">Open another file<input type="file" id="pick_file_control"/></div>
 		<h2>Options</h2>
+        <!--
+        fix me: zoom disabled
 		<h3>Zoom</h3>
 		<div class="switch android">
 			<input id="zoom-on" name="zoom" type="radio" value="1" checked />
@@ -34,6 +35,7 @@
 
 			<span class="slide-button"></span>
 		</div>
+        -->
 		<h3>Visualization</h3>
 		<div class="switch android">
 			<input id="fitwidth-width" name="fitwidth" type="radio" value="1" checked />
@@ -54,24 +56,10 @@
 
 			<span class="slide-button"></span>
 		</div>
-		<!--
-		<h3>First time Tour</h3>
-		<div class="switch android">
-			<input id="tour-on" name="tour" type="radio" value="1" checked />
-			<label for="tour-on">On</label>
-
-			<input id="tour-off" name="tour" type="radio" value="0" />
-			<label for="tour-off">Off</label>
-
-			<span class="slide-button"></span>
-		</div>
-		-->
-		<!--
 		<h2>About</h2>
 		<p>
-			OpenBerg is a zip / cbz comic reader...
+			OpenBerg is a zip / cbz comic reader. You can find and collaborate in the source code in <a href="https://github.com/Yoric/openberg">GitHub</a>.
 		</p>
-		-->
     </div>
     <div id="openberg">
         <div id="pages" style="display: none;">

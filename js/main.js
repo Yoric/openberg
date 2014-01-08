@@ -49,7 +49,7 @@
 
   /**
    * Local Storage Options
-  */   
+  */
   var readerOptions = {};
   // Get ComicReader general options using local Storage or load a new options set
   if ( typeof(Storage)!=="undefined" && localStorage.getItem( 'readerOptionsStored' ) ) {
@@ -60,8 +60,7 @@
       readerOptions = {
           'zoom': false,
           'fitwidth': true,
-          'rememberpage': true,
-          'tour': false
+          'rememberpage': true
       };
       // Save in local storage if avaible
       if ( typeof(Storage)!=="undefined" ) {
@@ -150,7 +149,7 @@
 
   /**
   * Open / Cose Menu
-  */ 
+  */
   var openmenu = function openmenu(){
     if (eltMenu.className == 'menu_open') {
       eltMenu.className = 'menu_close';
@@ -220,7 +219,7 @@
   $("input[type=radio]").change(function() {
       var option = $(this).attr("name"),
           value = $(this).val();
-      
+
       flipBook.readerOptions[option] = (value == 1) ? true : false;
 
       // Save value in local storage
@@ -245,9 +244,9 @@
   // Touchable events
   var $toTheNext = $(eltRight).Touchable();
   var $toThePrev = $(eltLeft).Touchable();
-  // Click / swipe to next page   
+  // Click / swipe to next page
   $toTheNext.on('touchableend', oncontrol );
-  // Click / swipe to prev page  
+  // Click / swipe to prev page
   $toThePrev.on('touchableend', oncontrol );
 
   window.OpenBerg = {
