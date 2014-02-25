@@ -79,18 +79,42 @@ Controls
 */
 #openberg #pages .control {
     background: rgba(0,0,0,0); /* IE hack */
+    border-color: rgba(0,0,0,0);
     cursor: pointer;
     height: 100%;
+    opacity: 0.5;
     position: absolute;
     top: 0;
     width: 50px;
     z-index: 3;
 }
+#openberg #pages .control:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #333;
+    opacity: 1;
+}
 #openberg #pages #go_left {
-    left: 0%;
+    border-right-style: solid;
+    border-right-width: 5px;
+    left: 0;
 }
 #openberg #pages #go_right {
-    right: 0%;
+    border-left-style: solid;
+    border-left-width: 5px;
+    right: 0;
+}
+#openberg #pages .control .arrow {
+    color: #333333;
+    font-size: 48px;
+    font-weight: bold;
+    height: 48px;
+    line-height: 48px;
+    margin-top: -24px;
+    position: absolute;
+    text-align: center;
+    text-shadow: 0 0 2px #FFFFFF;
+    top: 50%;
+    width: 50px;
 }
 
 /*
@@ -302,7 +326,7 @@ Left Menu
 
 /* ------------------------------------------
 CSS TOGGLE SWITCHES (Ionuț Colceriu)
-Licensed under Unlicense 
+Licensed under Unlicense
 https://github.com/ghinda/css-toggle-switch
 ------------------------------------------ */
 
@@ -326,20 +350,20 @@ https://github.com/ghinda/css-toggle-switch
     position: relative;
     padding: 0;
   }
-  
+
   .switch input {
     position: absolute;
     opacity: 0;
   }
-  
+
   .switch label {
     position: relative;
     z-index: 2;
-    
+
     float: left;
     width: 50%;
     height: 100%;
-    
+
     margin: 0;
     text-align: center;
   }
@@ -350,7 +374,7 @@ https://github.com/ghinda/css-toggle-switch
     left: 0;
     padding: 0;
     z-index: 1;
-    
+
     width: 50%;
     height: 100%;
   }
@@ -365,47 +389,47 @@ https://github.com/ghinda/css-toggle-switch
     width: 33.3%;
   }
 
-  .switch.switch-three input:checked:nth-of-type(2) ~ .slide-button { 
+  .switch.switch-three input:checked:nth-of-type(2) ~ .slide-button {
     left: 33.3%;
   }
 
   .switch.switch-three input:checked:last-of-type ~ .slide-button {
     left: 66.6%;
   }
-  
+
   /* Switch with 4 items */
   .switch.switch-four label,
   .switch.switch-four .slide-button {
     width: 25%;
   }
 
-  .switch.switch-four input:checked:nth-of-type(2) ~ .slide-button {  
+  .switch.switch-four input:checked:nth-of-type(2) ~ .slide-button {
     left: 25%;
   }
-  
-  .switch.switch-four input:checked:nth-of-type(3) ~ .slide-button {  
+
+  .switch.switch-four input:checked:nth-of-type(3) ~ .slide-button {
     left: 50%;
   }
 
   .switch.switch-four input:checked:last-of-type ~ .slide-button {
     left: 75%;
   }
-  
+
   /* Switch with 5 items */
   .switch.switch-five label,
   .switch.switch-five .slide-button {
     width: 20%;
   }
 
-  .switch.switch-five input:checked:nth-of-type(2) ~ .slide-button {  
+  .switch.switch-five input:checked:nth-of-type(2) ~ .slide-button {
     left: 20%;
   }
-  
-  .switch.switch-five input:checked:nth-of-type(3) ~ .slide-button {  
+
+  .switch.switch-five input:checked:nth-of-type(3) ~ .slide-button {
     left: 40%;
   }
-  
-  .switch.switch-five input:checked:nth-of-type(4) ~ .slide-button {  
+
+  .switch.switch-five input:checked:nth-of-type(4) ~ .slide-button {
     left: 60%;
   }
 
@@ -419,7 +443,7 @@ https://github.com/ghinda/css-toggle-switch
     display: block;
     height: 30px;
   }
-  
+
   .switch *,
   .toggle * {
     -webkit-box-sizing: border-box;
@@ -427,50 +451,50 @@ https://github.com/ghinda/css-toggle-switch
     -ms-box-sizing: border-box;
     box-sizing: border-box;
   }
-  
+
   .switch .slide-button,
   .toggle .slide-button {
     display: block;
-    
+
     -webkit-transition: all 0.3s ease-out;
     -moz-transition: all 0.3s ease-out;
     -ms-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
   }
-  
+
   .toggle label,
   .toggle p,
   .switch label {
     line-height: 30px;
     vertical-align: middle;
   }
-  
+
   .toggle input:checked ~ .slide-button {
     right: 50%;
   }
-  
+
   /* Outline the toggles when the inputs are focused */
   .toggle input:focus ~ .slide-button,
   .switch input:focus + label {
     outline: 1px dotted #888;
   }
-  
+
   /* Bugfix for older Webkit, including mobile Webkit. Adapted from:
    * http://css-tricks.com/webkit-sibling-bug/
    */
   .switch, .toggle {
     -webkit-animation: bugfix infinite 1s;
   }
-  
+
   @-webkit-keyframes bugfix { from { position: relative; } to { position: relative; } }
 
   /* Android Theme
    * Based on Holo
    */
-   
+
   .android {
     background-color: #b6b6b6;
-    
+
     color: #fff;
   }
 
@@ -481,10 +505,10 @@ https://github.com/ghinda/css-toggle-switch
   .android.switch {
     overflow: hidden;
   }
-    
+
   .android.switch .slide-button {
     background-color: #279fca;
-    
+
     -webkit-transform: skew(20deg) translateX(10px);
     -moz-transform: skew(20deg) translateX(10px);
     -ms-transform: skew(20deg) translateX(10px);
@@ -526,5 +550,5 @@ https://github.com/ghinda/css-toggle-switch
     top: 0;
     left: 0;
   }
-  
+
 }
