@@ -22,6 +22,8 @@
     this._rangeMap = [];
     this._status = null;
     this._updateEntries();
+    this._totalPages = 0;
+    this._bookName = "";
   };
   Book.prototype = {
     /**
@@ -31,12 +33,26 @@
     _updateEntries: function _updateEntries() {
       var deferred = Promise.defer();
       var self = this;
+      var totalPages = 0;
       obj.zip.createReader(
         new obj.zip.BlobReader(this._files[this._filesProcessed++]),
         function onSuccess(zip) {
           zip.getEntries(function onEntries(entries) {
             log("Pushing entries", entries);
-            self._rangeMap.push(entries);
+
+            // Examine files in zip and filtering content
+            var filterEntries = [];
+            for (var i = 0; i < entries.length; i++) {
+              // Not include MAC system files inside the zip if any
+              if (entries[i].filename.indexOf("__MACOSX") != 0) {
+                filterEntries.push(entries[i]);
+                totalPages ++;
+              }
+            }
+
+            self._rangeMap.push(filterEntries);
+
+            self._totalPages = totalPages;
             deferred.resolve();
           });
         },
@@ -45,6 +61,25 @@
           deferred.reject();
         });
       return self._status = deferred.promise;
+    },
+    get totalPages() {
+      /**
+       * Get the total number of pages / files in the zip
+       */
+      return this._totalPages;
+    },
+    set bookName(name) {
+      /**
+       * Set the name of the book
+       * return void
+       */
+      this._bookName = name;
+    },
+    get bookName() {
+      /**
+       * Get the name of the book
+       */
+      return this._bookName;
     },
     displayPage: function displayPage(page) {
       // Search page in range map
@@ -84,7 +119,8 @@
               currentRange.length - 1);
           }
           var pageEntry = currentRange[page];
-          console.log("Entry", pageEntry.fileName);
+
+          console.log("Entry", pageEntry.filename);
           if (pageEntry.directory) {
             console.log("Entry is a directory");
             return {directory: pageEntry.filename};

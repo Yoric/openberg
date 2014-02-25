@@ -1,6 +1,7 @@
 body {
     background-color:black;
     color: white;
+    font-family: tahoma,verdana,arial,sans-serif;
     height: 100%;
     overflow: hidden;
     margin: 0;
@@ -23,40 +24,40 @@ body {
 }
 
 /*
-  Open file tab
+  Open file button
 */
-.open:hover {
-    background-color: gray;
-}
-.open {
-    font-size: large;
-}
-
 #openberg {
-    text-align: right;
-    font-family: monospace
     margin: 0;
     padding: 0;
 }
 
-
-
-#openberg #title {
-    height: 100%;
-    margin-top: auto;
-    margin-bottom: auto;
+#openberg #welcome h1, #openberg #welcome h2 {
+    margin-bottom: 50px;
+    text-align: center;
 }
-#openberg #pick {
-    border-top: thin white;
-    position: absolute;
-    bottom: 0%;
-    text-align: right;
-    width: 100%;
+#pick_file_button, #pick_file_button_welcome {
+    background-color: #279fca;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 15px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 auto;
+    max-width: 300px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 80%;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
-#pick_file_tab {
-    bottom: 0%;
-    position: absolute;
-    width: 100%;
+#pick_file_button_welcome {
+    height: 55px;
+    line-height: 10px;
+    padding: 20px 0;
+}
+#pick_file_button:hover, #pick_file_button_welcome:hover {
+    background-color: #848484;
 }
 #pick_file_control {
     display:none;
@@ -65,7 +66,7 @@ body {
 /*
   Pages
 */
-#pages {
+#openberg #pages {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -73,29 +74,481 @@ body {
     padding: 0;
 }
 
-#pages img {
-    max-width: 100%;
-    max-height: 100%;
-}
-
 /*
 Controls
 */
-.control {
-    position:absolute;
-    bottom: 16px;
-    width: 32px;
-    height: 32px;
-    background-size: 32px 32px;
-    z-index: 10;
-    padding: 0;
+#openberg #pages .control {
+    background: rgba(0,0,0,0); /* IE hack */
+    border-color: rgba(0,0,0,0);
+    cursor: pointer;
+    height: 100%;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    width: 50px;
+    z-index: 3;
+}
+#openberg #pages .control:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #333;
+    opacity: 1;
+}
+#openberg #pages #go_left {
+    border-right-style: solid;
+    border-right-width: 5px;
+    left: 0;
+}
+#openberg #pages #go_right {
+    border-left-style: solid;
+    border-left-width: 5px;
+    right: 0;
+}
+#openberg #pages .control .arrow {
+    color: #333333;
+    font-size: 48px;
+    font-weight: bold;
+    height: 48px;
+    line-height: 48px;
+    margin-top: -24px;
+    position: absolute;
+    text-align: center;
+    text-shadow: 0 0 2px #FFFFFF;
+    top: 50%;
+    width: 50px;
+}
+
+/*
+Image visualization
+*/
+#openberg #flipbook {
+    position: absolute;
+    width: 100%;
+    height: 100%;
     margin: 0;
+    padding: 0;
+    text-align: center;
+    overflow: hidden;
+    opacity: 0;
 }
-#go_left {
-    background-image: url("../img/arrow_left2.png");
-    left: 0%;
+
+#openberg #flipbook.left {
+    -webkit-animation: moveFromRight .5s ease-out both;
+    -moz-animation: moveFromRight .5s ease-out both;
+    animation: moveFromRight .5s ease-out both;
+    opacity: 1;
 }
-#go_right {
-    background-image: url("../img/arrow_right2.png");
-    right: 0%;
+#openberg #flipbook.right {
+    -webkit-animation: moveFromLeft .5s ease-out both;
+    -moz-animation: moveFromLeft .5s ease-out both;
+    animation: moveFromLeft .5s ease-out both;
+    opacity: 1;
+}
+#openberg #flipbook.left.removeImage {
+    -webkit-animation: removeFromRight .3s ease-in both;
+    -moz-animation: removeFromRight .3s ease-in both;
+    animation: removeFromRight .3s ease-in both;
+    opacity: 1;
+}
+#openberg #flipbook.right.removeImage {
+    -webkit-animation: removeFromLeft .3s ease-in both;
+    -moz-animation: removeFromLeft .3s ease-in both;
+    animation: removeFromLeft .3s ease-in both;
+    opacity: 1;
+}
+@-webkit-keyframes moveFromLeft {
+    from { -webkit-transform: translateX(-100%); opacity: 0;}
+}
+@-moz-keyframes moveFromLeft {
+    from { -moz-transform: translateX(-100%); opacity: 0;}
+}
+@keyframes moveFromLeft {
+    from { transform: translateX(-100%); opacity: 0;}
+}
+@-webkit-keyframes moveFromRight {
+    from { -webkit-transform: translateX(100%); opacity: 0;}
+}
+@-moz-keyframes moveFromRight {
+    from { -moz-transform: translateX(100%); opacity: 0;}
+}
+@keyframes moveFromRight {
+    from { transform: translateX(100%); opacity: 0;}
+}
+
+@-webkit-keyframes removeFromLeft {
+    to { -webkit-transform: translateX(100%); opacity: 0;}
+}
+@-moz-keyframes removeFromLeft {
+    to { -moz-transform: translateX(100%); opacity: 0;}
+}
+@keyframes removeFromLeft {
+    to { transform: translateX(100%); opacity: 0;}
+}
+@-webkit-keyframes removeFromRight {
+    to { -webkit-transform: translateX(-100%); opacity: 0;}
+}
+@-moz-keyframes removeFromRight {
+    to { -moz-transform: translateX(-100%); opacity: 0;}
+}
+@keyframes removeFromRight {
+    to { transform: translateX(-100%); opacity: 0;}
+}
+
+
+
+/* Icons Font - http://icomoon.io/ */
+@font-face {
+    font-family: 'icomoon';
+    src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRk9UVE8AAAQoAAsAAAAABgQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAABCAAAAP8AAAE07VuHiUZGVE0AAAIIAAAAGgAAABxoHAyQR0RFRgAAAiQAAAAcAAAAIAAyAARPUy8yAAACQAAAAEsAAABgL9zcQGNtYXAAAAKMAAAARQAAAVrAF/LjaGVhZAAAAtQAAAAtAAAANvz9qn1oaGVhAAADBAAAAB4AAAAkBBD/5GhtdHgAAAMkAAAAEAAAABAEAAAgbWF4cAAAAzQAAAAGAAAABgAFUABuYW1lAAADPAAAAN8AAAGGUNnz7nBvc3QAAAQcAAAADAAAACAAAwAAeJxlj71KxEAUhe/NTkxYQlaXGVEYf4pUrkVYeysVxNLpLLVZgpsmVj6AurcSUvkK0/oWadP5CD7AXJiAJqjbyCm+j1ucw0UQAhAxXtyW92W5BAwA4ZQPAj4c8Y6gZESJ2B/D7vX0i2gtSUQF11yFGl4nGmBTw9uWhljj8RQ2ho4YJrANe5DB7GG5uMjzvMf5GvMfnPzu/s0D4BM+4wuuIEQMkqPLVUpcia7mOkotSzVj8xl1xv+z1LXC+pYNWdeGN43yd/Ro/RkVV/0tTNm4SjVeUtHVRLZx8oOc8ML1CTvhjeo/spGv3Ltygnw2xGW9kpPNUFBLUpSMvwGDdXADAHicY2BgYGQAgjO2i86D6LPvTR7AaABS4QgcAAB4nGNgZGBg4ANiCQYQYGJgBEIWMAbxGAAEdgA3eJxjYGZiYJzAwMrAwejDmMbAwOAOpb8ySDK0MDAwMbAyM8CBAILJEJDmmsLg8IDhAwPjg/8PGPQYHzAoNDAwMMIVKAAhIwAQQgwfAHicY2BgYGaAYBkGRgYQCAHyGMF8FgYLIM3FwMHABIQMDxgeMH9g+P8fpAjIZoKwFZgUGAUYoXqhgJGNAVVgBAIAP2cKqAAAAHicY2BkYGAAYiWDrrR4fpuvDNxMDCBw9r3JAwT9/wETAyOIz8EAlgYALAwLXQAAAHicY2BkYGB88P8Bgx4TAwPDPwYgCRRBAcwAbecD9gAAAgAAAAAAAAACAAAgAAAAAAAAUAAABQAAeJx1jkFqAkEQRd/oaAgJwVXIsiGbbGaY6aALDzAHyMK9SDMMqA2tQk7iyiNkmWPkADlCjuF3rE0WNhT96vev+g08ciTjcjLumBgPxG/GQ175NM6lfxmPeODHeCz9T84sv5fy1E9deCB+MR7SUBnn0k/GI575Nh5L/6VjRWSjimyhW8VNjIIPAi0H1ixJakN7WC8FTe/b93eSI+DwlEpzzFX/9101z5SCmcrLV/OuNXG7b2Jqg/Nl5ebOckV+WswKX9Uy3frbQqmJnd6vGXWfzyKkXacddVndnD0DBF052wB4nGNgZsALAAB9AAQ=) format('woff'),
+       url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+#menu-buton, .icon-folder, .icon-download {
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+#menu-buton:before {
+    content: "\e000";
+}
+.icon-folder {
+    font-size: 68px;
+    margin-top: 100px;
+}
+.icon-folder:before {
+    content: "\e002";
+}
+.icon-download:before {
+    content: "\e003";
+    font-size: 32px;
+}
+
+/*
+Left Menu
+*/
+#menu-buton {
+    color: white;
+    cursor: pointer;
+    font-size: 40px;
+    height: 50px;
+    left: -20px;
+    opacity: 0.2;
+    position: absolute;
+    text-decoration: none;
+    text-shadow: 0 0 5px #000000;
+    top: 0;
+    width: 60px;
+    z-index: 4;
+}
+#menu-buton.menu_link_open {
+    background: black;
+    left: 255px;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    -webkit-animation: animateMenu .6s ease both;
+    -moz-animation: animateMenu .6s ease both;
+    animation: animateMenu .6s ease both;
+}
+@-webkit-keyframes animateMenu {
+    from { height: 100%; opacity: 0.2; left: 0;}
+}
+@-moz-keyframes animateMenu {
+    from { height: 100%; opacity: 0.2; left: 0;}
+}
+@keyframes animateMenu {
+    from { height: 100%; opacity: 0.2; left: 0;}
+}
+
+#menu {
+    position: fixed;
+    width: 260px;
+    height: 100%;
+    top: 0;
+    z-index: 1000;
+    left: -260px;
+    overflow: auto;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+
+    font-family: tahoma, verdana, arial, sans-serif;
+    font-size: 15px;
+    background: #333333;
+    color: white;
+    -webkit-box-shadow: inset 0 0 5px 5px #222222;
+    -moz-box-shadow: inset 0 0 5px 5px #222222;
+    box-shadow: inset 0 0 5px 5px #222222;
+}
+#menu.menu_open {
+    left: 0px;
+}
+#menu h1 {
+    font-size: 28px;
+    font-weight: normal;
+    padding: 0 5px;
+    margin: 10px 0;
+}
+#menu h2 {
+    font-size: 20px;
+    font-weight: normal;
+    padding: 0 5px;
+    margin: 10px 0;
+}
+#menu h3 {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 0 15px;
+    margin: 0;
+    color: white;
+    line-height: 24px;
+}
+#menu p {
+    font-size: 13px;
+    margin: 0 0 12px;
+    word-wrap: break-word;
+}
+#menu p a {
+    color: rgba(255, 255, 255, 0.9);
+}
+#menu > p {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+#menu #fileName {
+    font-weight: bold;
+}
+
+/* ------------------------------------------
+CSS TOGGLE SWITCHES (Ionuț Colceriu)
+Licensed under Unlicense
+https://github.com/ghinda/css-toggle-switch
+------------------------------------------ */
+
+/* Hide by default */
+
+.switch .slide-button,
+.toggle p span {
+  display: none;
+}
+
+/* Toggle Switches */
+
+/* We can't test for a specific feature,
+ * so we only target browsers with support for media queries.
+ */
+@media only screen {
+
+  /* Radio Switch
+   */
+  .switch {
+    position: relative;
+    padding: 0;
+  }
+
+  .switch input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .switch label {
+    position: relative;
+    z-index: 2;
+
+    float: left;
+    width: 50%;
+    height: 100%;
+
+    margin: 0;
+    text-align: center;
+  }
+
+  .switch .slide-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    z-index: 1;
+
+    width: 50%;
+    height: 100%;
+  }
+
+  .switch input:last-of-type:checked ~ .slide-button {
+    left: 50%;
+  }
+
+  /* Switch with 3 items */
+  .switch.switch-three label,
+  .switch.switch-three .slide-button {
+    width: 33.3%;
+  }
+
+  .switch.switch-three input:checked:nth-of-type(2) ~ .slide-button {
+    left: 33.3%;
+  }
+
+  .switch.switch-three input:checked:last-of-type ~ .slide-button {
+    left: 66.6%;
+  }
+
+  /* Switch with 4 items */
+  .switch.switch-four label,
+  .switch.switch-four .slide-button {
+    width: 25%;
+  }
+
+  .switch.switch-four input:checked:nth-of-type(2) ~ .slide-button {
+    left: 25%;
+  }
+
+  .switch.switch-four input:checked:nth-of-type(3) ~ .slide-button {
+    left: 50%;
+  }
+
+  .switch.switch-four input:checked:last-of-type ~ .slide-button {
+    left: 75%;
+  }
+
+  /* Switch with 5 items */
+  .switch.switch-five label,
+  .switch.switch-five .slide-button {
+    width: 20%;
+  }
+
+  .switch.switch-five input:checked:nth-of-type(2) ~ .slide-button {
+    left: 20%;
+  }
+
+  .switch.switch-five input:checked:nth-of-type(3) ~ .slide-button {
+    left: 40%;
+  }
+
+  .switch.switch-five input:checked:nth-of-type(4) ~ .slide-button {
+    left: 60%;
+  }
+
+  .switch.switch-five input:checked:last-of-type ~ .slide-button {
+    left: 80%;
+  }
+
+  /* Shared */
+  .toggle,
+  .switch {
+    display: block;
+    height: 30px;
+  }
+
+  .switch *,
+  .toggle * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .switch .slide-button,
+  .toggle .slide-button {
+    display: block;
+
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+  }
+
+  .toggle label,
+  .toggle p,
+  .switch label {
+    line-height: 30px;
+    vertical-align: middle;
+  }
+
+  .toggle input:checked ~ .slide-button {
+    right: 50%;
+  }
+
+  /* Outline the toggles when the inputs are focused */
+  .toggle input:focus ~ .slide-button,
+  .switch input:focus + label {
+    outline: 1px dotted #888;
+  }
+
+  /* Bugfix for older Webkit, including mobile Webkit. Adapted from:
+   * http://css-tricks.com/webkit-sibling-bug/
+   */
+  .switch, .toggle {
+    -webkit-animation: bugfix infinite 1s;
+  }
+
+  @-webkit-keyframes bugfix { from { position: relative; } to { position: relative; } }
+
+  /* Android Theme
+   * Based on Holo
+   */
+
+  .android {
+    background-color: #b6b6b6;
+
+    color: #fff;
+  }
+
+  .android.toggle {
+    border: 2px solid #b6b6b6;
+  }
+
+  .android.switch {
+    overflow: hidden;
+  }
+
+  .android.switch .slide-button {
+    background-color: #279fca;
+
+    -webkit-transform: skew(20deg) translateX(10px);
+    -moz-transform: skew(20deg) translateX(10px);
+    -ms-transform: skew(20deg) translateX(10px);
+    transform: skew(20deg) translateX(10px);
+  }
+
+  .android.toggle .slide-button {
+    border-radius: 2px;
+    background-color: #848484;
+  }
+
+  /* Selected ON toggle */
+  .android.toggle input:first-of-type:checked ~ .slide-button {
+    background-color: #279fca;
+  }
+
+  .android.switch input:first-of-type:checked ~ .slide-button {
+    -webkit-transform: skew(20deg) translateX(-10px);
+    -moz-transform: skew(20deg) translateX(-10px);
+    -ms-transform: skew(20deg) translateX(-10px);
+    transform: skew(20deg) translateX(-10px);
+  }
+
+  .android p {
+    color: #333;
+  }
+
+  .android span {
+    color: #fff;
+  }
+
+  .android.switch,
+  .android span {
+    text-transform: uppercase;
+  }
+
+  /* Fix Android/Holo Theme in firefox - force absolute position */
+  .android.switch input {
+    top: 0;
+    left: 0;
+  }
+
 }

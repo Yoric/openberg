@@ -5,8 +5,7 @@
   var console = obj.console;
   var Promise = obj["promise/core"];
 
-
-  var FlipBook = function FlipBook(parent, options) {
+  var FlipBook = function FlipBook(parent, options, readerOptions) {
     this._map = null;
     this._bufferBefore = options.bufferBackwardsSize;
     this._bufferAfter = options.bufferForwardsSize;
@@ -14,7 +13,10 @@
     this._page = 0;
     this._previousPage = -1;
     this._parent = parent;
+    this._readerOptions = readerOptions;
+    this._displayClass = "left";
   };
+
   FlipBook.prototype = {
     get book() {
       return this._book;
@@ -52,6 +54,18 @@
     get page() {
       return this._page;
     },
+    set readerOptions(options) {
+      this._readerOptions = options;
+    },
+    get readerOptions() {
+      return this._readerOptions;
+    },
+    set displayClass(option) {
+      this._displayClass = option;
+    },
+    get displayClass() {
+      return this._displayClass;
+    },
     display: function display() {
       console.log("Display of page", this.page,
       "has been requested - I come from page", this._previousPage);
@@ -59,7 +73,10 @@
       var promise = this.fetch(page);
       var self = this;
       var eltPages = this._parent;
-      eltPages.classList.add("loading");
+      var readerOptions = this.readerOptions;
+      var displayClass = this.displayClass;
+      var bookName = this.book.bookName;
+
       return Promise.withLog(promise.then(
         function onSuccess(data) {
           var log = window.console.log.bind(window.console, "display onSucess");
@@ -67,19 +84,73 @@
           if (page != self.page) {
             log("FIXME", "Do not display", pageNum, "we have moved away from that page");
           }
-          eltPages.classList.remove("loading");
+          eltPages.className = "removeImage " + displayClass;
           if ("directory" in data) {
             log("Page is a directory", data.directory);
-            eltPages.textContent = "Directory " + data.directory;
+            var dir = document.createElement("DIV");
+            dir.classList.add("icon-folder");
+            var dirbr = document.createElement('br');
+            var dirtxt = document.createTextNode("Directory " + data.directory);
+
+            eltPages.appendChild(dir);
+            eltPages.appendChild(dirbr);
+            eltPages.appendChild(dirtxt);
+
+            //Remove class to fire css effect
+            eltPages.classList.remove("removeImage");
             return;
           }
           if ("imgURL" in data) {
             log("Page is an image");
             var date1 = Date.now();
+
             eltPages.innerHTML = "";
             var img = document.createElement("img");
             eltPages.appendChild(img);
+            eltPages.scrollTop = 0;
+            eltPages.style.overflowY = "hidden";
+            eltPages.style.width = "100%";
             img.src = data.imgURL;
+
+            // Type of Visualization
+            function loadVisualization() {
+              if (readerOptions.zoom) {
+              // Zoom ON
+              // Fixme - zoom deactivated - search for an open source solution or make our own
+                 if (readerOptions.fitwidth) {
+                //Fit width
+                  eltPages.style.overflowY = "auto";
+                  img.style.width = "100%";
+                  eltPages.style.width = eltPages.parentElement.clientWidth + $.scrollbarWidth() + "px";
+                } else {
+                //Fit height
+                  img.style.height = "100%";
+                }
+              } else {
+              // Zoom OFF
+                if (readerOptions.fitwidth) {
+                //Fit width
+                  eltPages.style.overflowY = "auto";
+                  img.style.width = "100%";
+                  eltPages.style.width = eltPages.parentElement.clientWidth + $.scrollbarWidth() + "px";
+                } else {
+                //Fit height
+                  img.style.height = "100%";
+                }
+              }
+
+            }
+
+            img.onload = loadVisualization;
+
+            //Remove class to fire css effect
+            eltPages.classList.remove("removeImage");
+
+            // Save actual page in LocalStorage
+            if ( typeof(Storage)!=="undefined"  && readerOptions.rememberpage) {
+              localStorage.setItem( bookName + "_page", page );
+            }
+
             return;
           }
           console.error("Unrecognized data", data);
